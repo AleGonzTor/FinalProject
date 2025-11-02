@@ -12,7 +12,6 @@ class Personaje (pygame.sprite.Sprite):
            self.image = pygame.image.load("personaje.png").convert_alpha()
            self.image = pygame.transform.scale(self.image, (150, 150))
            self.rect = self.image.get_rect()
-           self.rect.center = (100,380)
 
 personaje = Personaje()
 background= pygame.image.load("fondo.png").convert()
@@ -54,7 +53,6 @@ while True:
              if event.key == pygame.K_SPACE and not is_jumping:
                   is_jumping = True 
                   jump_vel=15 
-     #evento salto  
         if event.type == pygame.KEYUP:
              if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                   x_speed = 0
@@ -83,9 +81,9 @@ while True:
                 coord_y = y_position
     personaje.rect.y = coord_y
      
-    
 
     screen.blit(background,(0,0))
     grupo_sprites.draw(screen)
     pygame.display.update()
     reloj.tick(60)
+
