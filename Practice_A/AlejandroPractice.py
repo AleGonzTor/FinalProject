@@ -9,13 +9,18 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('PVJ')
 clock = pygame.time.Clock()
 
+fondo = pygame.image.load("FinalProject\Practice_A\Sprites\Back.png").convert()
+fondo = pygame.transform.scale(fondo, (width, height))
+
+floor = height - 120
+
 class Personaje(pygame.sprite.Sprite):
     def __init__(self, pos_x = width/2, pos_y = height/2):
         ###Inicia la superclase
         super().__init__()
 
         ###Imagen
-        pic = pygame.image.load("FinalProject\Practice_A\knight.png").convert_alpha()
+        pic = pygame.image.load("FinalProject\Practice_A\Sprites\Char.png").convert_alpha()
         ###13h x 19v
         n_size = (pic.get_width()*4, pic.get_height()*4)
         ###52x76
@@ -60,16 +65,16 @@ class Personaje(pygame.sprite.Sprite):
 
     def jump(self):
         self.v_speed = self.j_speed
-
+                                                                                                                                                                                                                              
     def check_borders(self):
         if self.l_left < 0:
             self.x = 0 + 26
         if self.l_right > width:
             self.x = width - 26
-        if self.y < 0:
-            self.y += self.speed
-        if self.y >= height - 38:
-            self.y = height - 38
+        if self.y <= 38:
+            self.y = 0 + 38
+        if self.y >= floor - 38:
+            self.y = floor - 38
         self.rect.center = (self.x, self.y)
         self.bot = self.y + 38
         self.top = self.y - 38
@@ -94,12 +99,11 @@ while True:
             caballero.mv_right(dt)        
         if keys[pygame.K_w]:
             caballero.jump()
-        if keys[pygame.K_s]:
-            caballero.mv_down()
     caballero.v_speed += caballero.gravity * dt
     caballero.y += caballero.v_speed * dt
     caballero.check_borders()
     screen.fill((150,200,255))
+    screen.blit(fondo, (0, 0))
     sprt.draw(screen)
     pygame.display.update()
     
