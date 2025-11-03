@@ -15,10 +15,12 @@ jump = False
 player = Character(30, constantes.HIGH_SCREEN - 30 - 36, "character.png")
 group_sprite = pygame.sprite.Group(player)
 clock = pygame.time.Clock()
-ground = Ground(0, constantes.HIGH_SCREEN-30, constantes.WITH_SCREEN, 30)
-ground2 = Ground(0, (constantes.HIGH_SCREEN/2) + (constantes.WITH_SCREEN/8), (constantes.WITH_SCREEN)-225, 30)
-plataform = Ground(1720, (constantes.HIGH_SCREEN) - (constantes.WITH_SCREEN/12),200, 30)
-all_ground = pygame.sprite.Group(ground, ground2, plataform)
+ground1_1 = Ground(0, constantes.HIGH_SCREEN-113, (constantes.WITH_SCREEN/3)-224, 120)
+ground1_2 = Ground(752, constantes.HIGH_SCREEN-113, (constantes.WITH_SCREEN/3)-224, 120)
+ground1_3 = Ground(1392, constantes.HIGH_SCREEN-113, (constantes.WITH_SCREEN/3), 120)
+ground2 = Ground(0, (constantes.HIGH_SCREEN/2) + (constantes.WITH_SCREEN/8) - 50, (constantes.WITH_SCREEN)-225, 30)
+plataform = Ground(1720, (constantes.HIGH_SCREEN) - (constantes.WITH_SCREEN/8),200, 30)
+all_ground = pygame.sprite.Group(ground1_1, ground1_2, ground1_3, ground2, plataform)
 
 while True:
     
@@ -26,9 +28,9 @@ while True:
     move_y = 0
     
     if go_right == True:
-        move_x = 20
+        move_x = 15
     if go_left == True:
-        move_x = -20
+        move_x = -15
 
     player.movimiento(move_x) 
     player.update(all_ground)
@@ -56,4 +58,5 @@ while True:
     all_ground.draw(screen)
     group_sprite.draw(screen)
     pygame.display.update()
+
     clock.tick(60)
