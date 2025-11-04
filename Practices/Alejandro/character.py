@@ -2,7 +2,7 @@ import pygame
 from constants import *
 
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, x = width/2, y = height/2, picture_path = "Sprites\Char.png"):
+    def __init__(self, x = b_w * base, y = b_h * base, picture_path = "Sprites\Char.png"):
 
         ###Inicia la superclase
         super().__init__()
@@ -11,11 +11,8 @@ class Personaje(pygame.sprite.Sprite):
         self.movement = [False, False, False, True]
         
         ###Imagen
-        pic = pygame.image.load(picture_path).convert_alpha()
-        n_size = (pic.get_width()*2, pic.get_height()*2)
-        self.image = pygame.transform.scale(pic, n_size)
-        self.image.set_colorkey((255, 255, 255))
-        self.rect = self.image.get_rect()
+        self.image = pygame.image.load(picture_path).convert_alpha()
+        self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
         
         ###Aceleracion
@@ -29,8 +26,6 @@ class Personaje(pygame.sprite.Sprite):
         self.h_speed = 0
 
         self.j_speed = -750
-    
-        self.rect.center = (x, y)
 
     #Para definir el movimiento, tiene que ser derecha suma a la posición x y izquierda resta a la posición x
     #Todo esto usa aceleración, pero se está complicando mucho eso de la aceleración, y de todos modos va a ser casi imperceptible
