@@ -1,11 +1,13 @@
 from constants import *
 from character import *
+from platform import *
 import pygame
 from sys import exit
 
 pygame.init()
 
-screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+display = pygame.Surface((width, height)) ###
 pygame.display.set_caption('PVJ')
 clock = pygame.time.Clock()
 
@@ -16,7 +18,9 @@ floor = height - 120
                                                                                                                                                                                                                               
 
 caballero = Personaje()
-sprt = pygame.sprite.Group(caballero)
+plataforma = Platform(520, 200)
+sprt = pygame.sprite.Group(caballero, plataforma)
+pltfrms = pygame.sprite.Group(plataforma)
 
 while True:
     dt = clock.tick(60) / 1000
@@ -26,8 +30,10 @@ while True:
             exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
+                caballero.h_speed = 0
                 caballero.movement[0] = True
             if event.key == pygame.K_d:
+                caballero.h_speed = 0
                 caballero.movement[1] = True
             if event.key == pygame.K_s:
                 caballero.movement[2] = True
@@ -42,9 +48,11 @@ while True:
                 caballero.movement[2] = False
 
 
-    caballero.update_pos(dt)
-    screen.fill((150,200,255))
-    screen.blit(fondo, (0, 0))
-    sprt.draw(screen)
+    caballero.update_pos(dt, pltfrms)
+    display.fill((150,200,255))
+    display.blit(fondo, (0, 0))
+    sprt.draw(display)
+    scaled = pygame.transform.scale(display, screen.get_size())
+    screen.blit(scaled, (0, 0))
     pygame.display.update()
-    
+

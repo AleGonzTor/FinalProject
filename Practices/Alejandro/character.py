@@ -2,13 +2,14 @@ import pygame
 from constants import *
 
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x = width/2, pos_y = height/2, picture_path = "Sprites\Char.png"):
+    def __init__(self, x = width/2, y = height/2, picture_path = "Sprites\Char.png"):
 
         ###Inicia la superclase
         super().__init__()
 
         #Son las teclas que tiene, a,d,w (izq, der, jump (si puede saltar))
         self.movement = [False, False, False, True]
+        
         ###Imagen
         pic = pygame.image.load(picture_path).convert_alpha()
         n_size = (pic.get_width()*2, pic.get_height()*2)
@@ -29,7 +30,7 @@ class Personaje(pygame.sprite.Sprite):
 
         self.j_speed = -750
     
-        self.rect.center = (pos_x, pos_y)
+        self.rect.center = (x, y)
 
     #Para definir el movimiento, tiene que ser derecha suma a la posición x y izquierda resta a la posición x
     #Todo esto usa aceleración, pero se está complicando mucho eso de la aceleración, y de todos modos va a ser casi imperceptible
@@ -48,7 +49,7 @@ class Personaje(pygame.sprite.Sprite):
         if can_jump:
             self.v_speed = self.j_speed
             
-    def update_pos(self, dt):
+    def update_pos(self, dt, platforms):
         if self.movement[2]:
             self.h_speed = 0
         elif self.movement[0] and self.movement[1]:
@@ -67,6 +68,12 @@ class Personaje(pygame.sprite.Sprite):
 
         self.rect.centerx += self.h_speed * dt
         self.rect.centery += self.v_speed * dt
+
+        colissions = pygame.sprite.spritecollide(self, platforms, False)
+        for platform in colissions:
+            if self.v_speed > 0:
+                self.rect.bottom = platform.rect.top
+                self.v_speed = 0
 
         if self.rect.right >= width:
             self.rect.right = width
