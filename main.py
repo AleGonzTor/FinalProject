@@ -1,26 +1,28 @@
 from constants import *
 from character import *
+from object import *
+from ground import *
 from platform import *
+from decoration import *
 import pygame
 from sys import exit
 
 pygame.init()
 
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-display = pygame.Surface((width, height)) ###
+display = pygame.Surface((WIDTH, HEIGHT)) ###
 pygame.display.set_caption('PVJ')
 clock = pygame.time.Clock()
 
 fondo = pygame.image.load("Sprites\Back.png").convert()
-fondo = pygame.transform.scale(fondo, (width, height))
-
-floor = height - 120
+fondo = pygame.transform.scale(fondo, (WIDTH, HEIGHT))
                                                                                                                                                                                                                               
 
-caballero = Personaje()
-plataforma = Platform(520, 200)
-sprt = pygame.sprite.Group(caballero, plataforma)
-pltfrms = pygame.sprite.Group(plataforma)
+caballero = Personaje(0, 0)
+plataforma = Platform(20, 19, "Sprites\Platform.png", 5, 1)
+floor = Ground(0, 25, "Sprites\Floor.png", WIDTH, 1)
+sprt = pygame.sprite.Group(caballero, plataforma, floor)
+pltfrms = pygame.sprite.Group(plataforma, floor)
 
 while True:
     dt = clock.tick(60) / 1000
@@ -29,6 +31,9 @@ while True:
             pygame.quit()
             exit()
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                exit()
             if event.key == pygame.K_a:
                 caballero.h_speed = 0
                 caballero.movement[0] = True
@@ -37,8 +42,8 @@ while True:
                 caballero.movement[1] = True
             if event.key == pygame.K_s:
                 caballero.movement[2] = True
-            if event.key == pygame.K_w:
-                caballero.jump(True)
+            if event.key == pygame.K_w or event.key == pygame.K_SPACE:
+                caballero.jump()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 caballero.movement[0] = False
