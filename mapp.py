@@ -13,21 +13,22 @@ class Map:
         self.bg = bg
         
         self.chars = chars or [Character(0, 0, "Sprites/Char.png")]
-        self.floor = floor or [Ground(0, 40, "Sprites/Floor.png", WIDTH, 1)]
-        self.decorations = decorations or [Decoration(2, 39, 1), Decoration(30, 39, 2)]
-        self.platforms = platforms or [Platform(20, 30, "Sprites/Platform.png", 10, 1), Platform(28, 24, "Sprites/Platform.png", 10, 1)]
-        self.obst = obst or [Obstacle_h(0, 39, 10), Obstacle_h(39, 10, 10), Spike(40, 39)]
+        self.floor = floor or [Ground(0, 30, "Sprites/Floor.png", WIDTH, 1)]
+        self.decorations = decorations or [Decoration(2, 29, 1), Decoration(30, 29, 2)]
+        self.platforms = platforms or [Platform(20, 25, "Sprites/Platform.png", 10, 1), Platform(28, 20, "Sprites/Platform.png", 10, 1)]
+        self.obst = obst or [Obstacle_h(0, 29, 10), Obstacle_h(39, 10, 10), Spike(40, 29)]
 
         self.char_group = pygame.sprite.Group(self.chars)
         self.floor_group = pygame.sprite.Group(self.floor)
         self.decorations_group = pygame.sprite.Group(self.decorations)
         self.platforms_group = pygame.sprite.Group(self.platforms)
         self.obst_group = pygame.sprite.Group(self.obst)
+        self.collision_group = pygame.sprite.Group(self.platforms, self.floor, self.obst)
 
         self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst)
 
-    def get_platforms(self):
-        return self.platforms_group
+    def get_collision_group(self):
+        return self.collision_group
     
     def get_decorations(self):
         return self.decorations_group

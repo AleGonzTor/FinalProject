@@ -29,10 +29,12 @@ fondo = pygame.transform.scale(fondo, (WIDTH, HEIGHT))
 #floor = Ground(0, 25, "Sprites\Floor.png", WIDTH, 1)
 caballero = (m.get_char())[0]
 sprt = m.get_all()
-pltfrms = m.get_platforms()
+collision_group = m.get_collision_group()
 
 while True:
     dt = clock.tick(60) / 1000
+    for x in m.get_obst():
+        x.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -58,9 +60,10 @@ while True:
                 caballero.movement[1] = False
             if event.key == pygame.K_s:
                 caballero.movement[2] = False
+        
 
 
-    caballero.update_pos(dt, pltfrms)
+    caballero.update_pos(dt, collision_group)
     display.fill((150,200,255))
     display.blit(fondo, (0, 0))
     sprt.draw(display)
