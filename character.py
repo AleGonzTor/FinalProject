@@ -15,7 +15,8 @@ class Character(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
         
-        ###Aceleracio ty = 2000
+        ###Aceleracion
+        self.gravity = 2000
         self.acceleration = 800
         self.momentum = 1200
 

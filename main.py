@@ -5,7 +5,7 @@ from ground import *
 from platform import *
 from decoration import *
 from obstacles import *
-from mapp import *
+#from mapp import *
 import pygame
 from sys import exit
 
@@ -16,9 +16,11 @@ display = pygame.Surface((WIDTH, HEIGHT)) ###
 pygame.display.set_caption('PVJ')
 clock = pygame.time.Clock()
  
+from mapp import *
+
 m = Map()
 
-fondo = pygame.image.load(m.get_bg()).convert()
+fondo = pygame.image.load("Sprites\Back.png").convert()
 fondo = pygame.transform.scale(fondo, (WIDTH, HEIGHT))
                                                                                                                                                                                                                               
 
