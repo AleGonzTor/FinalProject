@@ -1,4 +1,4 @@
-from object import *
+from obj import *
 from constants import *
 import pygame
 

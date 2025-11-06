@@ -1,15 +1,24 @@
 import pygame
-from object import*
+from constants import *
+from obstacle import *
 
-class Obstacle(Object):
-    def __init__ (self,x,y,speed,pic=None,damage=1,guy="normal"):
-        super(). __init__(x,y,pic)
-        self.speed=speed
-        self.damage=damage
-        #self.guy=guy
-
+class Obstacle_h(Obstacle):
     def update(self):
-        pass
+        self.rect.x += self.speed
+        if self.rect.right >= WIDTH or self.rect.left<=0:
+            self.speed*=-1
 
+class Obstacle_v(Obstacle):
+    def update(self):
+        self.rect.y += self.speed
+        if self.rect.bottom >= HEIGHT or self.rect.top<=0:
+            self.speed*=-1
+
+class Spike(Object):
+    def __init__(self,x,y,pic="Sprites\Spike.png",damage=1,tipo="pincho"):
+        super().__init__(x,y,pic)
+        self.damage=damage
+        self.tipo=tipo
+        
     def efecto(self,Personaje):
-        Personaje.health -= self.damage
+        Personaje.vida -= self.damage

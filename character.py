@@ -1,7 +1,7 @@
 import pygame
 from constants import *
 
-class Personaje(pygame.sprite.Sprite):
+class Character(pygame.sprite.Sprite):
     def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "Sprites\Char.png"):
 
         ###Inicia la superclase
@@ -15,8 +15,7 @@ class Personaje(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
         
-        ###Aceleracion
-        self.gravity = 2000
+        ###Aceleracio ty = 2000
         self.acceleration = 800
         self.momentum = 1200
 

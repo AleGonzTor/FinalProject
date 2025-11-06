@@ -1,9 +1,11 @@
 from constants import *
 from character import *
-from object import *
+from obj import *
 from ground import *
 from platform import *
 from decoration import *
+from obstacles import *
+from mapp import *
 import pygame
 from sys import exit
 
@@ -13,16 +15,19 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 display = pygame.Surface((WIDTH, HEIGHT)) ###
 pygame.display.set_caption('PVJ')
 clock = pygame.time.Clock()
+ 
+m = Map()
 
-fondo = pygame.image.load("Sprites\Back.png").convert()
+fondo = pygame.image.load(m.get_bg()).convert()
 fondo = pygame.transform.scale(fondo, (WIDTH, HEIGHT))
                                                                                                                                                                                                                               
 
-caballero = Personaje(0, 0)
-plataforma = Platform(20, 19, "Sprites\Platform.png", 5, 1)
-floor = Ground(0, 25, "Sprites\Floor.png", WIDTH, 1)
-sprt = pygame.sprite.Group(caballero, plataforma, floor)
-pltfrms = pygame.sprite.Group(plataforma, floor)
+#caballero = Personaje(0, 0)
+#plataforma = Platform(20, 19, "Sprites\Platform.png", 5, 1)
+#floor = Ground(0, 25, "Sprites\Floor.png", WIDTH, 1)
+caballero = (m.get_char())[0]
+sprt = m.get_all()
+pltfrms = m.get_platforms()
 
 while True:
     dt = clock.tick(60) / 1000
