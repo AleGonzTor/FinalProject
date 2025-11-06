@@ -1,8 +1,5 @@
 import pygame
 
-#constantes del tamaño de la decoracion
-TILE_WIDTH = 105
-TILE_HEIGHT = 150
 
 class Object(pygame.sprite.Sprite):
     def __init__(self, x, y, pic=None):
@@ -45,4 +42,5 @@ class Decoration(Object):
 
 
         
+
 
