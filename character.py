@@ -49,9 +49,11 @@ class Character(pygame.sprite.Sprite):
         hits = pygame.sprite.spritecollide(self, platforms, False)
         for hit in hits:
             if self.h_speed > 0:
-                self.rect.right = hit.rect.left
+                self.h_speed = 0
+                self.rect.right = hit.rect.left - 2
             elif self.h_speed < 0:
-                self.rect.left = hit.rect.right
+                self.h_speed = 0
+                self.rect.left = hit.rect.right + 2
 
     def colision_vertical(self, platforms):
         hits = pygame.sprite.spritecollide(self, platforms, False)

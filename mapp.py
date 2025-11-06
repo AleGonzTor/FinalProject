@@ -14,11 +14,12 @@ class Map:
         
         self.chars = chars or [Character(0, 0, "Sprites/Char.png")]
         self.floor = floor or [Ground(0, 30, "Sprites/Floor.png", WIDTH, 1)]
-        self.decorations = decorations or [Decoration(2, 29, 1), Decoration(30, 29, 2)]
+        self.decorations = decorations or [Decoration(2, 29, 1), Decoration(30, 29, 2),
+                                           Decoration(10, 23, 3), Decoration(50, 5, 4), Decoration(4, 24, 5), Decoration(32, 24, 6)]
         self.platforms = platforms or [Platform(20, 25, "Sprites/Platform.png", 10, 1), Platform(28, 20, "Sprites/Platform.png", 10, 1)]
         self.obst = obst or [Obstacle_h(0, 29, 10), Obstacle_v(39, 10, 10), Spike(40, 29)]
 
-        self.decorations[1].scale(0.5)
+        #self.decorations[1].scale(30)
         
         self.char_group = pygame.sprite.Group(self.chars)
         self.floor_group = pygame.sprite.Group(self.floor)
