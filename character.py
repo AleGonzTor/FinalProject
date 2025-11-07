@@ -66,6 +66,15 @@ class Character(pygame.sprite.Sprite):
                 self.rect.top = hit.rect.bottom
                 self.v_speed = 0
     
+    def set_h_speed(self, speed):
+        self.h_speed = speed
+
+    def set_v_speed(self, speed):
+        self.v_speed = speed
+    
+    def set_movement(self, key, pressed = False):
+        self.movement[key] = pressed
+
     def update_pos(self, dt, platforms):
         if self.movement[2]:
             if self.v_speed < 0:
