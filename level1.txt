@@ -1,0 +1,14 @@
+"./Sprites/Back.png"
+Character, 0, 0, "./Sprites/Char.png"
+Ground, 0, 30, "./Floor.png"
+Decoration, 2, 29, 1
+Decoration, 30, 29, 2
+Decoration, 10, 23, 3
+Decoration, 50, 5, 4
+Decoration, 4, 24, 5
+Decoration, 32, 24, 6
+Platform, 20, 25, 10, 1, "./Sprites/Platform.png"
+Platform, 28, 20, 10, 1, "./Sprites/Platform.png"
+Obstacle_h, 0, 29, 10
+Obstacle_v, 39, 10, 10
+Spike, 40, 29
