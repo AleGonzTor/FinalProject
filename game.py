@@ -1,11 +1,4 @@
-from character import *
-from constants import *
-from decoration import *
-from ground import *
-from obj import *
-from obstacle import *
-from obstacles import *
-from mapp import *
+from map import *
 
 import pygame
 
@@ -27,7 +20,8 @@ class Game:
         else:
             self.curr_map = Map()
     
-        self.character = (self.curr_map.get_char())[0]
+        self.characters_list = self.curr_map.get_char()
+        self.character = (self.characters_list)[0]
 
         self.collission = self.curr_map.get_collision_group()
         self.platforms = self.curr_map.get_platforms_group()

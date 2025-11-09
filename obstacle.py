@@ -11,5 +11,5 @@ class Obstacle(Object):
     def update(self):
         pass
 
-    def efecto(self,Personaje):
-        Personaje.health -= self.damage
+    def efecto(self,character):
+        character.health -= self.damage

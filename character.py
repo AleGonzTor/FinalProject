@@ -2,7 +2,7 @@ import pygame
 from constants import *
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "./Sprites/Char.png"):
+    def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "Sprites\Char.png"):
 
         ###Inicia la superclase
         super().__init__()
@@ -45,27 +45,92 @@ class Character(pygame.sprite.Sprite):
             self.v_speed = self.j_speed
             self.movement[3] = False
             
-    def colision_horizontal(self, platforms):
-        hits = pygame.sprite.spritecollide(self, platforms, False)
+#    def horizontal_collide(self, tough_platforms, dt):
+#        self.rect.centerx += self.h_speed * dt        
+#        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
+#        for hit in hits:
+#            if self.h_speed > 0:
+#                self.rect.right = hit.rect.left 
+#                self.h_speed = 0
+#            elif self.h_speed < 0:
+#                self.rect.left = hit.rect.right
+#                self.h_speed = 0
+    
+    def horizontal_collide(self, tough_platforms, dt):
+        self.rect.centerx += self.h_speed * dt
+        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
         for hit in hits:
-            if self.h_speed > 0:
+            if self.rect.right - hit.rect.left < hit.rect.right - self.rect.left:
+                self.rect.right = hit.rect.left
+            else:
+                self.rect.left = hit.rect.right
+            if self.h_speed != 0:
                 self.h_speed = 0
-                self.rect.right = hit.rect.left - 2
-            elif self.h_speed < 0:
-                self.h_speed = 0
-                self.rect.left = hit.rect.right + 2
 
-    def colision_vertical(self, platforms):
+#    def vertical_collide(self, tough_platforms,  dt):
+#        self.v_speed += self.gravity * dt
+#        self.rect.centery += self.v_speed * dt
+#        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
+#        for hit in hits:
+#            if self.v_speed > 0:
+#                self.rect.bottom = hit.rect.top
+#                self.v_speed = 0
+#                self.movement[3] = True
+#
+#            elif self.v_speed < 0:
+#                self.rect.top = hit.rect.bottom
+#                self.v_speed = 0
+
+    def vertical_collide(self, tough_platforms, dt):
+        self.v_speed += self.gravity * dt
+        self.rect.centery += self.v_speed * dt
+
+        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
+        for hit in hits:
+            if self.rect.bottom - hit.rect.top < hit.rect.bottom - self.rect.top:
+                self.rect.bottom = hit.rect.top 
+                self.movement[3] = True
+
+            else:
+                self.rect.top = hit.rect.bottom
+
+            if self.v_speed != 0:    
+                self.v_speed = 0
+    
+
+                
+    def normal_platforms_collide(self, tough_platforms, dt):
+
+        self.horizontal_collide(tough_platforms, dt)        
+        self.vertical_collide(tough_platforms, dt)
+
+
+    def platform_collide (self, platforms, dt):
+        self.v_speed += self.gravity * dt
+        self.rect.centery += self.v_speed * dt
         hits = pygame.sprite.spritecollide(self, platforms, False)
         for hit in hits:
             if self.v_speed > 0:
                 self.rect.bottom = hit.rect.top
                 self.v_speed = 0
                 self.movement[3] = True
-            elif self.v_speed < 0:
-                self.rect.top = hit.rect.bottom
-                self.v_speed = 0
+        self.rect.x += self.h_speed * dt
     
+    def jumpable_walle_collide(self, wall, dt):
+        self.rect.centerx += self.h_speed * dt
+        hits = pygame.sprite.spritecollide(self, wall, False)
+        for hit in hits:
+                if self.h_speed > 0:
+                    self.rect.right = hit.rect.left 
+                    self.h_speed = 0
+                    self.movement[3] = True
+                elif self.h_speed < 0:
+                    self.rect.left = hit.rect.right
+                    self.h_speed = 0
+                    self.movement[3] = True
+        self.vertical_collide(wall, dt)
+
+            
     def set_h_speed(self, speed):
         self.h_speed = speed
 
@@ -90,22 +155,14 @@ class Character(pygame.sprite.Sprite):
         else:
             if self.h_speed < 0:   
                 self.h_speed += self.momentum * dt
-            else:
+            elif self.h_speed > 0:
                 self.h_speed -= self.momentum * dt
 
         if self.v_speed > 0:
             self.movement[3] = False
-
-        self.v_speed += self.gravity * dt
-
-        self.rect.centerx += self.h_speed * dt
-        self.rect.centery += self.v_speed * dt
-
-        self.colision_vertical(platforms)
-        self.colision_horizontal(platforms)
         
+        self.normal_platforms_collide(platforms, dt)
 
-        
         if self.rect.right >= WIDTH:
             self.rect.right = WIDTH
         elif self.rect.left <= 0:

@@ -1,5 +1,4 @@
 from obj import *
-from constants import *
 import pygame
 
 class Decoration(Object):

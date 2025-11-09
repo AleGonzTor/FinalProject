@@ -3,9 +3,10 @@ from constants import *
 from decoration import *
 from ground import *
 from platform import *
-from obj import *
-from obstacle import *
-from obstacles import *
+from vertical_obstacle import *
+from horizontal_obstacle import *
+from spike import *
+
 import pygame
 
 class Map:
