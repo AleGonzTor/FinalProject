@@ -7,7 +7,7 @@ class Character(pygame.sprite.Sprite):
         ###Inicia la superclase
         super().__init__()
 
-        #Son las teclas que tiene, a,d,w,s
+        #Son las teclas de movimiento y si se están presionando o no, salvo la última que en realidad es para saber si el personaje puede (o no) saltar. Estas se activan mediante la clase game, donde si se presiona x tecla, cambia el estado del movimiento del personaje
         self.movement = [False, False, False, True]
         
         ###Imagen
@@ -15,12 +15,12 @@ class Character(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
         
-        ###Aceleracion
+        ###Estas son aceleraciones que tiene el personaje, sea la gravedad que hace que el personaje siempre esté cayendo, sea la aceleración, que hace que el personaje no esté inmediatamente en su velocidad máxima y el momentum, que es una resistencia que hace que cuando el personaje deje de moverse, este tenga un movimiento de inercia.
         self.gravity = 2000
         self.acceleration = 800
         self.momentum = 1200
 
-        ###Velocidad
+        ###Esta es la velocidad del personaje, v_speed es la velocidad vertical que tiene en el momento, si esta es negativa, el personaje salta, como siempre tiene la gravedad así salte, este tiende a ir hacia abajo. h_speed es la velocidad horizontal que tiene en el momento, que se usa en otros metodos para calcular su distancia recorrida por frame, h_max_speed es el máximo de velocidad que puede ganar el personaje, que nos ayudará a limitar su aceleración y que no corra muy rápido, j_speed es la velocidad de su salto, o su fuerza, si es menor, salta más rápido y llega más alto, si es mayor, salta más lento y llega menos alto. 
         self.v_speed = 0
         self.h_mspeed = 1200
         self.h_speed = 0
@@ -44,67 +44,66 @@ class Character(pygame.sprite.Sprite):
         if self.movement[3]:
             self.v_speed = self.j_speed
             self.movement[3] = False
-            
-#    def horizontal_collide(self, tough_platforms, dt):
-#        self.rect.centerx += self.h_speed * dt        
-#        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
-#        for hit in hits:
-#            if self.h_speed > 0:
-#                self.rect.right = hit.rect.left 
-#                self.h_speed = 0
-#            elif self.h_speed < 0:
-#                self.rect.left = hit.rect.right
-#                self.h_speed = 0
-    
-    def horizontal_collide(self, tough_platforms, dt):
-        self.rect.centerx += self.h_speed * dt
+
+    def horizontal_movement(self, tough_platforms, dt):
+        #Si el personaje está en movimiento, vamos a hacerlo mover, si no se mueve nos ahorramos una multiplicación y una asinación
+        if self.h_speed != 0:
+            self.rect.centerx += self.h_speed * dt
+        
+        #Asignamos a hits los sprites del grupo "tough_platforms" que tengan colisión con el personaje.
         hits = pygame.sprite.spritecollide(self, tough_platforms, False)
+        
+        #Iteramos colisión por colisión (sprite por sprite)
         for hit in hits:
-            if self.rect.right - hit.rect.left < hit.rect.right - self.rect.left:
+            
+            #Si el personaje viene por la izquierda, su distancia con el borde izquierdo será menor a la distancia del borde derecho con el centro del personaje
+            if self.rect.centerx - hit.rect.left < hit.rect.right - self.rect.centerx:
                 self.rect.right = hit.rect.left
-            else:
+
+            #Si viene por la derecha pasa lo contrario, podriamos verificar si está andentro que sucede
+            elif self.rect.centerx - hit.rect.left > hit.rect.right - self.rect.centerx:
                 self.rect.left = hit.rect.right
+            
+            #Si de alguna manera está en el centro, es decir se metio dentro del cel objeto, solo lo ponemos arriba
+            else:
+                self.rect.bottom = hit.rect.top
+                
+            #Si se está moviendo y hay colisión, cambiamos la velocidad a 0
             if self.h_speed != 0:
                 self.h_speed = 0
+    
+    def vertical_movement(self, tough_platforms, dt):
+        #Verificamos la siguiente posición del personaje, es decir lo hacemos moverse, luego ajustaremos su posición en caso hubiese colisión
 
-#    def vertical_collide(self, tough_platforms,  dt):
-#        self.v_speed += self.gravity * dt
-#        self.rect.centery += self.v_speed * dt
-#        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
-#        for hit in hits:
-#            if self.v_speed > 0:
-#                self.rect.bottom = hit.rect.top
-#                self.v_speed = 0
-#                self.movement[3] = True
-#
-#            elif self.v_speed < 0:
-#                self.rect.top = hit.rect.bottom
-#                self.v_speed = 0
-
-    def vertical_collide(self, tough_platforms, dt):
         self.v_speed += self.gravity * dt
         self.rect.centery += self.v_speed * dt
 
+        #Lo mismo que antes, es el grupo de las colisiones
         hits = pygame.sprite.spritecollide(self, tough_platforms, False)
+        
         for hit in hits:
-            if self.rect.bottom - hit.rect.top < hit.rect.bottom - self.rect.top:
-                self.rect.bottom = hit.rect.top 
-                self.movement[3] = True
-
-            else:
+            
+            #Si viene por abajo, lo dejamos abajo.
+            if self.rect.centery - hit.rect.top > hit.rect.bottom - self.rect.centery:
                 self.rect.top = hit.rect.bottom
+            
+            #Si viene por arriba, hacemos que se pare encima y le reiniciamos el salto.
+            else:
+                self.rect.bottom = hit.rect.top 
+                self.movement[3] = True 
 
+            #Si estab en movimiento hacemos la reasignación de la velocidad.
             if self.v_speed != 0:    
                 self.v_speed = 0
     
 
-                
-    def normal_platforms_collide(self, tough_platforms, dt):
+    #Llama a las funciones de movimiento horizontal y vertical en su orden.
+    def normal_movement(self, tough_platforms, dt):
 
-        self.horizontal_collide(tough_platforms, dt)        
-        self.vertical_collide(tough_platforms, dt)
+        self.horizontal_movement(tough_platforms, dt)        
+        self.vertical_movement(tough_platforms, dt)
 
-
+    #Este metodo toma otro grupo de plataformas, unas que puedes traspasar desde abajo, pero no desde arriba, y hace que al cruzarlas puedas estar sobre ellas, pero no bajar de ellas (por el momento) 
     def platform_collide (self, platforms, dt):
         self.v_speed += self.gravity * dt
         self.rect.centery += self.v_speed * dt
@@ -116,6 +115,7 @@ class Character(pygame.sprite.Sprite):
                 self.movement[3] = True
         self.rect.x += self.h_speed * dt
     
+    #Este metodo tomará muros, de los que podrías sostenerte y saltar al lado contrario.
     def jumpable_walle_collide(self, wall, dt):
         self.rect.centerx += self.h_speed * dt
         hits = pygame.sprite.spritecollide(self, wall, False)
@@ -130,7 +130,7 @@ class Character(pygame.sprite.Sprite):
                     self.movement[3] = True
         self.vertical_collide(wall, dt)
 
-            
+    #Son metodos para modificar atributos privados desde un metodo en lugar de acceder a ellos
     def set_h_speed(self, speed):
         self.h_speed = speed
 
@@ -141,27 +141,40 @@ class Character(pygame.sprite.Sprite):
         self.movement[key] = pressed
 
     def update_pos(self, dt, platforms):
+        #Si presionamos "s", si el personaje estaba saltando, dejará de saltar y por el contrario, comenzará a caer más rápido) 
         if self.movement[2]:
             if self.v_speed < 0:
-                self.v_speed = 0
+                self.v_speed = 500
             else:
                 self.v_speed * dt * 1000
+
+        #Si presionamos "a" y "d", el personaje no sabe si ir a la izquierda o a la derecha, por ende la velocidad se establecerá en 0, puede ser un metodo eficiente para frenar en seco.
         if self.movement[0] and self.movement[1]:
             self.h_speed = 0
+
+        #Si solo se presiona la "a" el personaje calculará su velocidad hacia la izquierda
         elif self.movement[0]:
             self.mv_left(dt)
+
+        #Si es solo la "d" el personaje calculará su velocidad hacia la derecha
         elif self.movement[1]:
             self.mv_right(dt)
+
+        #Si no se presionan estas teclas de movimiento horizontal, se aplicará el momentum, que en realidad, sería como una resistencia del aire, el personaje no frenará en seco a menos que lo hagas frenar en seco.
         else:
             if self.h_speed < 0:   
                 self.h_speed += self.momentum * dt
             elif self.h_speed > 0:
                 self.h_speed -= self.momentum * dt
 
+        #Si el personaje esta cayendo, no podrá saltar, por ende sabemos que nuestro personaje solo salta cuando está encima de una plataforma o si modificamos este estado de salto
         if self.v_speed > 0:
             self.movement[3] = False
         
-        self.normal_platforms_collide(platforms, dt)
+        #Acá calcularemos las colisiones que se hacen, de modo que calculará la posición siguiente del personaje y luego si no tiene colisión el personaje se moverá donde tiene que ir, sin embargo, si tiene colisión, ajustaremos al personaje para que no se mueva adentro de una plataforma
+        self.normal_movement(platforms, dt)
+
+        #Calcula los limites del mapa (DEBEMOS ELIMINAR ESTO, NECESITAMOS CREAR UN METODO QUE CALCULE LOS LIMITES O UNOS MUROS QUE LIMITEN EL MAPA.
 
         if self.rect.right >= WIDTH:
             self.rect.right = WIDTH
