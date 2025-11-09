@@ -9,7 +9,7 @@ from obstacles import *
 import pygame
 
 class Map:
-    def __init__(self, bg = ".\Sprites\Back.png", chars = None, floor = None, decorations = None, platforms = None, obst = None):
+    def __init__(self, bg = "./Sprites/Back.png", chars = None, floor = None, decorations = None, platforms = None, obst = None):
         self.bg_path = bg
         
         self.bg = pygame.image.load(self.bg_path).convert()

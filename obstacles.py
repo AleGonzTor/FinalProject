@@ -15,7 +15,7 @@ class Obstacle_v(Obstacle):
             self.speed*=-1
 
 class Spike(Object):
-    def __init__(self,x,y,pic=".\Sprites\Spike.png",damage=1,tipo="pincho"):
+    def __init__(self,x,y,pic="./Sprites/Spike.png",damage=1,tipo="pincho"):
         super().__init__(x,y,pic)
         self.damage=damage
         self.tipo=tipo
