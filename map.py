@@ -6,11 +6,12 @@ from platform import *
 from vertical_obstacle import *
 from horizontal_obstacle import *
 from spike import *
+from slime import *
 
 import pygame
 
 class Map:
-    def __init__(self, bg = "./Sprites/Back.png", chars = None, floor = None, decorations = None, platforms = None, obst = None):
+    def __init__(self, bg = "./Sprites/Back.png", chars = None, floor = None, decorations = None, platforms = None, obst = None, slime = None):
         self.bg_path = bg
         
         self.bg = pygame.image.load(self.bg_path).convert()
@@ -21,9 +22,11 @@ class Map:
                                            Decoration(10, 23, 3), Decoration(50, 5, 4), Decoration(4, 24, 5), Decoration(32, 24, 6)]
         self.platforms = platforms or [Platform(20, 25, 10, 1, "./Sprites/Platform.png"), Platform(28, 20, 10, 1, "./Sprites/Platform.png")]
         self.obst = obst or [Obstacle_h(0, 29, 10), Obstacle_v(39, 10, 10), Spike(40, 29)]
-
-        self.decorations[1].scale(3)
+        self.slime = slime or [Slime(0,29,1,"./Sprites/Slime.png",0)]
+        #self.decorations[1].scale(3)
+       
         
+        self.slime_group = pygame.sprite.Group(self.slime)
         self.char_group = pygame.sprite.Group(self.chars)
         self.floor_group = pygame.sprite.Group(self.floor)
         self.decorations_group = pygame.sprite.Group(self.decorations)
@@ -31,7 +34,7 @@ class Map:
         self.obst_group = pygame.sprite.Group(self.obst)
         self.collision_group = pygame.sprite.Group(self.platforms, self.floor, self.obst)
 
-        self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst)
+        self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst, self.slime)
 
     def get_collision_group(self):
         return self.collision_group
@@ -53,3 +56,7 @@ class Map:
 
     def get_all(self):
         return self.all_sprites
+
+    def get_slime(self):
+        return self.slime_group
+

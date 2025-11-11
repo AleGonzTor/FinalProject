@@ -15,7 +15,7 @@ class Game:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.display = pygame.Surface((WIDTH, HEIGHT)) ###
         pygame.display.set_caption(name)
-        self.jump_sound = pygame.mixer.Sound("Sounds/Jump.wav")
+        self.jump_sound = pygame.mixer.Sound("./Sounds/Jump.wav")
         self.clock = pygame.time.Clock()
 
         if maps:
@@ -25,7 +25,7 @@ class Game:
     
         self.characters_list = self.curr_map.get_char()
         self.character = (self.characters_list)[0]
-
+        self.slimes = self.curr_map.get_slime()
         self.collission = self.curr_map.get_collision_group()
         self.platforms = self.curr_map.get_platforms_group()
         self.obstacles = self.curr_map.get_obst()
@@ -35,6 +35,8 @@ class Game:
     def main_void(self):
         while True:
             dt = self.clock.tick(60) / 1000
+            for slime in self.slimes:
+                slime.update()
             for obstacle in self.obstacles:
                 obstacle.update()
             for event in pygame.event.get():
@@ -73,7 +75,8 @@ class Game:
                         #self.character.movement[2] = False
                         self.character.set_movement(2)
 
-            self.character.update_pos(dt, self.collission)
+            self.character.update_pos(dt, self.collission) 
+            self.character.general_bounce_colision(self.slimes, dt)            
             self.display.fill((150,200,255))
             self.display.blit(self.curr_map.get_bg(), (0, 0))
             self.sprites.draw(self.display)

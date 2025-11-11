@@ -119,17 +119,56 @@ class Character(pygame.sprite.Sprite):
     def jumpable_walle_collide(self, wall, dt):
         self.rect.centerx += self.h_speed * dt
         hits = pygame.sprite.spritecollide(self, wall, False)
-        for hit in hits:
-                if self.h_speed > 0:
-                    self.rect.right = hit.rect.left 
-                    self.h_speed = 0
-                    self.movement[3] = True
-                elif self.h_speed < 0:
-                    self.rect.left = hit.rect.right
-                    self.h_speed = 0
-                    self.movement[3] = True
-        self.vertical_collide(wall, dt)
+        self.is_on_wall = False  # por defecto no está en pared
 
+        for hit in hits:
+            if self.h_speed > 0:
+                self.rect.right = hit.rect.left 
+                self.h_speed = 0
+                self.wall_side = "right"
+                self.movement[3] = True
+                self.is_on_wall = True
+
+            elif self.h_speed < 0:
+                self.rect.left = hit.rect.right
+                self.h_speed = 0
+                self.wall_side = "left"
+                self.movement[3] = True
+                self.is_on_wall = True
+        if self.is_on_wall and self.v_speed > 0:
+            self.v_speed = min(self.v_speed, 25)  # velocidad de caída lenta
+
+
+        self.vertical_movement(wall, dt)
+
+    def collision_bounce_vertical (self, object, dt):
+        hits = pygame.sprite.spritecollide(self, object, False)
+
+        for hit in hits:
+            # Solo rebota si viene cayendo (v_speed > 0)
+            if self.v_speed > 0 and self.rect.bottom <= hit.rect.bottom:
+                self.rect.bottom = hit.rect.top
+                self.v_speed = -abs(self.v_speed) * 0.9
+            # Solo rebota si salta (v_speed < 0)
+            if self.v_speed < 0 and self.rect.top >= hit.rect.top:
+                self.rect.top = hit.rect.bottom
+                self.v_speed = abs(self.v_speed) * 0.9
+                
+    def collision_bounce_horizontal (self, object, dt):
+        hits = pygame.sprite.spritecollide(self, object, False)
+
+        for hit in hits:   
+            #Si va a la derecha (self.h_speed > 0)
+            if self.h_speed > 0 and self.rect.right <= hit.rect.right:
+                self.rect.right = hit.rect.left
+                self.h_speed = -abs(self.h_speed) * 0.7
+            if self.h_speed < 0 and self.rect.left >= hit.rect.left:
+                self.rect.left = hit.rect.right
+                self.h_speed = abs(self.h_speed) * 0.7
+                
+    def general_bounce_colision (self, slime, dt):
+        self.collision_bounce_vertical(slime, dt)    
+        self.collision_bounce_horizontal(slime,dt)
     #Son metodos para modificar atributos privados desde un metodo en lugar de acceder a ellos
     def set_h_speed(self, speed):
         self.h_speed = speed
