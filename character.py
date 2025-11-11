@@ -18,6 +18,7 @@ class Character(pygame.sprite.Sprite):
         self.image = pygame.image.load(picture_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
+        self.posicion_inicial = (x, y)
         
         ###Estas son aceleraciones que tiene el personaje, sea la gravedad que hace que el personaje siempre esté cayendo, sea la aceleración, que hace que el personaje no esté inmediatamente en su velocidad máxima y el momentum, que es una resistencia que hace que cuando el personaje deje de moverse, este tenga un movimiento de inercia.
         self.gravity = 2000
@@ -144,7 +145,7 @@ class Character(pygame.sprite.Sprite):
 
 
         self.vertical_movement(wall, dt)
-
+#Esta funcion hace que cada ve que se colisione por arribo o abajo cause un rebote
     def collision_bounce_vertical (self, object, dt):
         hits = pygame.sprite.spritecollide(self, object, False)
 
@@ -157,7 +158,7 @@ class Character(pygame.sprite.Sprite):
             if self.v_speed < 0 and self.rect.top >= hit.rect.top:
                 self.rect.top = hit.rect.bottom
                 self.v_speed = abs(self.v_speed) * 0.9
-                
+#Esta funcion lo mismo pero horizontal                
     def collision_bounce_horizontal (self, object, dt):
         hits = pygame.sprite.spritecollide(self, object, False)
 
@@ -169,10 +170,22 @@ class Character(pygame.sprite.Sprite):
             if self.h_speed < 0 and self.rect.left >= hit.rect.left:
                 self.rect.left = hit.rect.right
                 self.h_speed = abs(self.h_speed) * 0.7
-                
+#Llama a las dos                
     def general_bounce_colision (self, slime, dt):
         self.collision_bounce_vertical(slime, dt)    
         self.collision_bounce_horizontal(slime,dt)
+    
+#En esta funcion cada vez que dectecte que la colision del personaje es igual a la del objeto lo llevara al spawn
+    def dead_colision (self, obj_damage):
+        hits = pygame.sprite.spritecollide(self, obj_damage, False)
+        if hits:
+            self.rect.x, self.rect.y = self.posicion_inicial
+            self.h_speed = 0
+            self.v_speed = 0
+
+    
+        
+    
     #Son metodos para modificar atributos privados desde un metodo en lugar de acceder a ellos
     def set_h_speed(self, speed):
         self.h_speed = speed
@@ -229,3 +242,4 @@ class Character(pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
 
                                                                                                                                                                                                                 
+
