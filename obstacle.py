@@ -7,9 +7,14 @@ class Obstacle(Object):
         self.speed=speed
         self.damage=damage
         #self.guy=guy
+        
 
     def update(self):
         pass
 
     def efecto(self,character):
         character.health -= self.damage
+        if self.hit_player_sound is None:
+            self.hit_player_sound = pygame.mixer.Sound("Sounds/hurt1.wav")
+        self.hit_player_sound.play()
+
