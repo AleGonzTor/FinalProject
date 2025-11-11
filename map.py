@@ -23,7 +23,7 @@ class Map:
         self.platforms = platforms or [Platform(20, 25, 10, 1, "./Sprites/Platform.png"), Platform(28, 20, 10, 1, "./Sprites/Platform.png")]
         self.obst = obst or [Obstacle_h(0, 29, 10), Obstacle_v(39, 10, 10)]
         self.spikes = SpikeManager([(20, 5), (40, 5), (30, 5), (10, 5), (50, 5), (15, 5), (25, 5)])
-        self.slime = slime or [Slime(0,29,1,"./Sprites/Slime.png",0)]
+        self.slime = slime or [Slime(0,29,1,"./Sprites/Fat_bounce.png",0)]
         #self.decorations[1].scale(3)
        
         
@@ -33,7 +33,7 @@ class Map:
         self.decorations_group = pygame.sprite.Group(self.decorations)
         self.platforms_group = pygame.sprite.Group(self.platforms)
         self.obst_group = pygame.sprite.Group(self.obst)
-        self.collision_group = pygame.sprite.Group(self.platforms, self.floor, self.obst)
+        self.collision_group = pygame.sprite.Group(self.platforms, self.floor)
 
         self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst, self.slime)
 
