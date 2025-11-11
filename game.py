@@ -78,7 +78,8 @@ class Game:
                         self.character.set_movement(2)
             
             self.character.update_pos(dt, self.collission) 
-            self.character.general_bounce_colision(self.slimes, dt)            
+            self.character.general_bounce_colision(self.slimes, dt)  
+            self.character.dead_colision(self.obstacles) 
             self.display.fill((150,200,255))
             self.display.blit(self.curr_map.get_bg(), (0, 0))
             self.sprites.draw(self.display) 
