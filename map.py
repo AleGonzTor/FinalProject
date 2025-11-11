@@ -5,7 +5,7 @@ from ground import *
 from platform import *
 from vertical_obstacle import *
 from horizontal_obstacle import *
-from spike import *
+from spikemanager import *
 from slime import *
 
 import pygame
@@ -21,7 +21,8 @@ class Map:
         self.decorations = decorations or [Decoration(2, 29, 1), Decoration(30, 29, 2),
                                            Decoration(10, 23, 3), Decoration(50, 5, 4), Decoration(4, 24, 5), Decoration(32, 24, 6)]
         self.platforms = platforms or [Platform(20, 25, 10, 1, "./Sprites/Platform.png"), Platform(28, 20, 10, 1, "./Sprites/Platform.png")]
-        self.obst = obst or [Obstacle_h(0, 29, 10), Obstacle_v(39, 10, 10), Spike(40, 29)]
+        self.obst = obst or [Obstacle_h(0, 29, 10), Obstacle_v(39, 10, 10)]
+        self.spikes = SpikeManager([(20, 5), (40, 5), (30, 5), (10, 5), (50, 5), (15, 5), (25, 5)])
         self.slime = slime or [Slime(0,29,1,"./Sprites/Slime.png",0)]
         #self.decorations[1].scale(3)
        
@@ -60,3 +61,5 @@ class Map:
     def get_slime(self):
         return self.slime_group
 
+    def get_spikes(self):
+        return self.spikes

@@ -4,12 +4,16 @@ from constants import *
 class Character(pygame.sprite.Sprite):
     def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "Sprites\Char.png"):
 
+        
+            
         ###Inicia la superclase
         super().__init__()
 
         #Son las teclas de movimiento y si se están presionando o no, salvo la última que en realidad es para saber si el personaje puede (o no) saltar. Estas se activan mediante la clase game, donde si se presiona x tecla, cambia el estado del movimiento del personaje
         self.movement = [False, False, False, True]
         
+
+        self.health = 1
         ###Imagen
         self.image = pygame.image.load(picture_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
