@@ -19,7 +19,7 @@ class Map:
         self.platforms = []
         self.obst = []
         self.slime = []
-        self.spikes = None
+        
         self.spawn_point = (0, 0)
 
         self.spikes_positions = []
@@ -28,7 +28,7 @@ class Map:
 
         self.bg = pygame.image.load(self.bg_path).convert()
         self.bg = pygame.transform.scale(self.bg, (WIDTH, HEIGHT))
-        
+        self.spikes = SpikeManager(self.spikes_positions)
             
         self.slime_group = pygame.sprite.Group(self.slime)
         self.char_group = pygame.sprite.Group(self.chars)
@@ -52,15 +52,14 @@ class Map:
                     self.bg_path = line.strip('"')
                     continue
 
-                parts = [p.strip('"') for p in line.split(",")]
+                parts = [p.strip('"').strip("'") for p in line.split(",")]
                 obj_type = parts[0]
 
                 if obj_type == "Spawn":
                     self.spawn_point = (int(parts[1]), int(parts[2]))
 
                 elif obj_type == "Character":
-                    pic = parts[1]
-                    self.chars.append(Character(self.spawn_point[0], self.spawn_point[1], pic))
+                    self.chars.append(Character(self.spawn_point[0], self.spawn_point[1]))
 
                 elif obj_type == "Ground":
                     x, y = int(parts[1]), int(parts[2])
@@ -72,7 +71,7 @@ class Map:
 
                 elif obj_type == "Platform":
                     x, y, w, h = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4])
-                    self.platforms.append(Platform(x, y, w, h))
+                    self.platforms.append(Platform(x, y, w, h, "./Sprites/Platform.png"))
 
                 elif obj_type == "Obstacle_h":
                     x, y = int(parts[1]), int(parts[2])
@@ -83,7 +82,7 @@ class Map:
                     self.obst.append(Obstacle_v(x, y))
 
                 elif obj_type == "Slime":
-                    x, y, s, pic, d = int(parts[1]), int(parts[2]), int(parts[3]), parts[4]
+                    x, y, s = int(parts[1]), int(parts[2]), int(parts[3])
                     self.slime.append(Slime(x, y, s, "./Sprites/Fat_bounce.png"))
 
                 elif obj_type == "Spike":

@@ -5,7 +5,7 @@ from sounds import sounds
 
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "Sprites\Char.png"):
+    def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "./Sprites/Char.png"):
 
         
             
