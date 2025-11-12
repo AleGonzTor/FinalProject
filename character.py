@@ -1,5 +1,8 @@
 import pygame
 from constants import *
+from sounds import sounds
+
+
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "Sprites\Char.png"):
@@ -11,7 +14,7 @@ class Character(pygame.sprite.Sprite):
 
         #Son las teclas de movimiento y si se están presionando o no, salvo la última que en realidad es para saber si el personaje puede (o no) saltar. Estas se activan mediante la clase game, donde si se presiona x tecla, cambia el estado del movimiento del personaje
         self.movement = [False, False, False, True]
-        
+    
 
         self.health = 1
         ###Imagen
@@ -47,6 +50,7 @@ class Character(pygame.sprite.Sprite):
 
     def jump(self):
         if self.movement[3]:
+            sounds["jump"].play()
             self.v_speed = self.j_speed
             self.movement[3] = False
 
@@ -179,6 +183,7 @@ class Character(pygame.sprite.Sprite):
     def dead_colision (self, obj_damage):
         hits = pygame.sprite.spritecollide(self, obj_damage, False)
         if hits:
+            sounds["respawn"].play()
             self.rect.x, self.rect.y = self.posicion_inicial
             self.h_speed = 0
             self.v_speed = 0

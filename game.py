@@ -4,18 +4,16 @@ import pygame
 
 from sys import exit
 
+pygame.mixer.init()
 class Game:
     def __init__(self, maps = None, name = "PVJ"):
         pygame.init()
-        
-        pygame.mixer.init()
 
         self.curr_map_index = 0
         
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.display = pygame.Surface((WIDTH, HEIGHT)) ###
         pygame.display.set_caption(name)
-        self.jump_sound = pygame.mixer.Sound("./Sounds/Jump.wav")
         self.clock = pygame.time.Clock()
 
         if maps:
@@ -63,7 +61,6 @@ class Game:
                         #self.character.movement[2] = True
                         self.character.set_movement(2, True)
                     if event.key == pygame.K_w or event.key == pygame.K_SPACE:
-                        self.jump_sound.play()
                         self.character.jump()
                         
                 if event.type == pygame.KEYUP:
