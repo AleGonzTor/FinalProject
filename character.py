@@ -30,7 +30,7 @@ class Character(pygame.sprite.Sprite):
 
         ###Esta es la velocidad del personaje, v_speed es la velocidad vertical que tiene en el momento, si esta es negativa, el personaje salta, como siempre tiene la gravedad así salte, este tiende a ir hacia abajo. h_speed es la velocidad horizontal que tiene en el momento, que se usa en otros metodos para calcular su distancia recorrida por frame, h_max_speed es el máximo de velocidad que puede ganar el personaje, que nos ayudará a limitar su aceleración y que no corra muy rápido, j_speed es la velocidad de su salto, o su fuerza, si es menor, salta más rápido y llega más alto, si es mayor, salta más lento y llega menos alto. 
         self.v_speed = 0
-        self.h_mspeed = 1200
+        self.h_mspeed = 1600
         self.h_speed = 0
 
         self.j_speed = -750
