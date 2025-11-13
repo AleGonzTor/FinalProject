@@ -48,7 +48,7 @@ class SpikeTrap(Object):
             player.health -= self.damage  # o player.take_damage(self.damage) si defines el método
         # Puedes reiniciar al jugador si muere
         if player.health <= 0:
-            player.rect.topleft = player.posicion_inicial
+            player.rect.topleft = player.spawn_point
             player.health = 1
             player.h_speed = 0
             player.v_speed = 0

@@ -21,7 +21,7 @@ class Character(pygame.sprite.Sprite):
         self.image = pygame.image.load(picture_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
-        self.posicion_inicial = (x, y)
+        self.spawn_point = (x, y)
         
         ###Estas son aceleraciones que tiene el personaje, sea la gravedad que hace que el personaje siempre esté cayendo, sea la aceleración, que hace que el personaje no esté inmediatamente en su velocidad máxima y el momentum, que es una resistencia que hace que cuando el personaje deje de moverse, este tenga un movimiento de inercia.
         self.gravity = 2000
@@ -186,12 +186,13 @@ class Character(pygame.sprite.Sprite):
         hits = pygame.sprite.spritecollide(self, obj_damage, False)
         if hits:
             sound_manager.play("respawn")
-            self.rect.x, self.rect.y = self.posicion_inicial
+            self.rect.x, self.rect.y = self.spawn_point
             self.h_speed = 0
             self.v_speed = 0
 
     
-        
+    def take_damage(self, damage):
+        self.health -= damage
     
     #Son metodos para modificar atributos privados desde un metodo en lugar de acceder a ellos
     def set_h_speed(self, speed):
@@ -205,6 +206,10 @@ class Character(pygame.sprite.Sprite):
 
     def update_pos(self, dt, platforms):
         #Si presionamos "s", si el personaje estaba saltando, dejará de saltar y por el contrario, comenzará a caer más rápido) 
+        if self.health < 1:
+            self.healt = 1
+            self.rect.x, self.rect.y = self.spawn_point
+
         if self.movement[2]:
             if self.v_speed < 0:
                 self.v_speed = 500
