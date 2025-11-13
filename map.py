@@ -108,7 +108,7 @@ class Map:
                     x, y, mx, my = float(parts[1]), float(parts[2]), int(parts[3]), int(parts[4])
                     self.enemies_info.append((x,y,mx,my))
 
-        self.spikes = [SpikeTrap(x*TILE_SIZE, y*TILE_SIZE, pic="Platform") for x, y in self.spikes_positions]
+        self.spikes = [SpikeTrap(x, y, pic="Platform") for x, y in self.spikes_positions]
         
     #def _build_groups(self):
     #    self.slime_group = pygame.sprite.Group(self.slime)
