@@ -3,10 +3,13 @@ from constants import *
 from decoration import *
 from ground import *
 from platform import *
+from soft_platform import * 
 from vertical_obstacle import *
 from horizontal_obstacle import *
 from spikemanager import *
 from slime import *
+from spiketramp import *
+from enemy import *
 
 import pygame
 
@@ -17,28 +20,36 @@ class Map:
         self.floor = []
         self.decorations = []
         self.platforms = []
+        self.soft_platforms = []
         self.obst = []
         self.slime = []
         
         self.spawn_point = (0, 0)
 
         self.spikes_positions = []
+        self.spikes = []
+        self.enemies_info = []
 
         self.load_map_file(file)
 
+        self.enemies = [ChasingEnemy(x * TILE_SIZE, y * TILE_SIZE, mx, my, self.chars[0], "Slime") for x, y, mx, my in self.enemies_info]
+
         self.bg = pygame.image.load(self.bg_path).convert()
         self.bg = pygame.transform.scale(self.bg, (WIDTH, HEIGHT))
-        self.spikes = SpikeManager(self.spikes_positions)
+        
             
         self.slime_group = pygame.sprite.Group(self.slime)
         self.char_group = pygame.sprite.Group(self.chars)
         self.floor_group = pygame.sprite.Group(self.floor)
         self.decorations_group = pygame.sprite.Group(self.decorations)
         self.platforms_group = pygame.sprite.Group(self.platforms)
+        self.soft_platforms_group = pygame.sprite.Group(self.soft_platforms)
         self.obst_group = pygame.sprite.Group(self.obst)
         self.collision_group = pygame.sprite.Group(self.platforms, self.floor)
+        self.spikes_group = pygame.sprite.Group(self.spikes)
+        self.enemies_group = pygame.sprite.Group(self.enemies)  
 
-        self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst, self.slime)
+        self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.enemies)
 
     def load_map_file(self, file):
 
@@ -71,7 +82,11 @@ class Map:
 
                 elif obj_type == "Platform":
                     x, y, w, h = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4])
-                    self.platforms.append(Platform(x, y, w, h))
+                    self.platforms.append(Platform(x, y, w, h, "Platform"))
+    
+                elif obj_type == "SoftPlat":
+                    x, y, w, h = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4])
+                    self.soft_platforms.append(SoftPlatform(x, y, w, h, "Cloud"))
 
                 elif obj_type == "Obstacle_h":
                     x, y = int(parts[1]), int(parts[2])
@@ -86,9 +101,15 @@ class Map:
                     self.slime.append(Slime(x, y, s, "Fat_bounce"))
 
                 elif obj_type == "Spike":
-                    x, y = int(parts[1]), int(parts[2])
+                    x, y = float(parts[1]), float(parts[2])
                     self.spikes_positions.append((x, y))
+                
+                elif obj_type == "Enemy":
+                    x, y, mx, my = float(parts[1]), float(parts[2]), int(parts[3]), int(parts[4])
+                    self.enemies_info.append((x,y,mx,my))
 
+        self.spikes = [SpikeTrap(x*TILE_SIZE, y*TILE_SIZE, pic="Platform") for x, y in self.spikes_positions]
+        
     #def _build_groups(self):
     #    self.slime_group = pygame.sprite.Group(self.slime)
     #    self.char_group = pygame.sprite.Group(self.chars)
@@ -105,6 +126,9 @@ class Map:
     def get_platforms_group(self):
         return self.platforms_group
     
+    def get_soft_platforms_group(self):
+        return self.soft_platforms_group
+
     def get_decorations(self):
         return self.decorations_group
 
@@ -124,4 +148,7 @@ class Map:
         return self.slime_group
 
     def get_spikes(self):
-        return self.spikes
+        return self.spikes_group
+
+    def get_enemies(self):
+        return self.enemies_group

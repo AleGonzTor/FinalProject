@@ -105,7 +105,7 @@ class Character(pygame.sprite.Sprite):
             if self.v_speed != 0:    
                 self.v_speed = 0
     
-
+ 
     #Llama a las funciones de movimiento horizontal y vertical en su orden.
     def normal_movement(self, tough_platforms, dt):
 
@@ -114,8 +114,8 @@ class Character(pygame.sprite.Sprite):
 
     #Este metodo toma otro grupo de plataformas, unas que puedes traspasar desde abajo, pero no desde arriba, y hace que al cruzarlas puedas estar sobre ellas, pero no bajar de ellas (por el momento) 
     def platform_collide (self, platforms, dt):
-        self.v_speed += self.gravity * dt
-        self.rect.centery += self.v_speed * dt
+        #self.v_speed += self.gravity * dt
+        #self.rect.centery += self.v_speed * dt
         hits = pygame.sprite.spritecollide(self, platforms, False)
         for hit in hits:
             if self.v_speed > 0:
@@ -126,7 +126,7 @@ class Character(pygame.sprite.Sprite):
     
     #Este metodo tomará muros, de los que podrías sostenerte y saltar al lado contrario.
     def jumpable_walle_collide(self, wall, dt):
-        self.rect.centerx += self.h_speed * dt
+        #self.rect.centerx += self.h_speed * dt
         hits = pygame.sprite.spritecollide(self, wall, False)
         self.is_on_wall = False  # por defecto no está en pared
 

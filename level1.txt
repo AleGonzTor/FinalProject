@@ -6,10 +6,19 @@ Decoration, 2, 29, 1
 Decoration, 30, 29, 2
 Decoration, 10, 23, 3
 Decoration, 50, 5, 4
-Decoration, 4, 24, 5
-Decoration, 32, 24, 6
-Platform, 20, 35, 10, 1
-Platform, 28, 30, 10, 1
+Decoration, 4, 39, 5
+Decoration, 32, 39, 6
+Platform, 20, 36, 10, 1
+Platform, 28, 32, 10, 1
+SoftPlat, 36, 26, 10, 1
+SoftPlat, 36, 20, 10, 1
 Obstacle_v, 39, 10, 10
-Spike, 40, 29
-Slime, 0, 29, 1
+Spike, 1, 1
+Spike, 1.1, 1
+Spike, 1.2, 1
+Spike, 1.3, 1
+Spike, 1.4, 1
+Spike, 1.5, 1
+Spike, 1.6, 1
+Enemy, 6, 1.5, 50, 70
+Slime, 0, 39, 1
