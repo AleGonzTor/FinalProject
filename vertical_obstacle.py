@@ -1,7 +1,7 @@
 import pygame
 from constants import *
 from obstacle import *
-from sounds import sounds
+from sounds import sound_manager
 
 class Obstacle_v(Obstacle):
     
@@ -9,4 +9,5 @@ class Obstacle_v(Obstacle):
         self.rect.y += self.speed
         if self.rect.bottom >= HEIGHT or self.rect.top<=0:
             self.speed*=-1
-            sounds["hit"].play()
+            sound_manager.play("hit")
+
