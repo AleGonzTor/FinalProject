@@ -1,6 +1,6 @@
 import pygame
 from constants import *
-from sounds import sounds
+from sounds import sound_manager
 
 
 
@@ -50,7 +50,7 @@ class Character(pygame.sprite.Sprite):
 
     def jump(self):
         if self.movement[3]:
-            sounds["jump"].play()
+            sound_manager.play("jump")
             self.v_speed = self.j_speed
             self.movement[3] = False
 
@@ -158,10 +158,12 @@ class Character(pygame.sprite.Sprite):
             if self.v_speed > 0 and self.rect.bottom <= hit.rect.bottom:
                 self.rect.bottom = hit.rect.top
                 self.v_speed = -abs(self.v_speed) * 0.9
+                sound_manager.play("bounce")
             # Solo rebota si salta (v_speed < 0)
             if self.v_speed < 0 and self.rect.top >= hit.rect.top:
                 self.rect.top = hit.rect.bottom
                 self.v_speed = abs(self.v_speed) * 0.9
+                sound_manager.play("bounce")
 #Esta funcion lo mismo pero horizontal                
     def collision_bounce_horizontal (self, object, dt):
         hits = pygame.sprite.spritecollide(self, object, False)
@@ -183,7 +185,7 @@ class Character(pygame.sprite.Sprite):
     def dead_colision (self, obj_damage):
         hits = pygame.sprite.spritecollide(self, obj_damage, False)
         if hits:
-            sounds["respawn"].play()
+            sound_manager.play("respawn")
             self.rect.x, self.rect.y = self.posicion_inicial
             self.h_speed = 0
             self.v_speed = 0
@@ -247,4 +249,5 @@ class Character(pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
 
                                                                                                                                                                                                                 
+
 
