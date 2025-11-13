@@ -2,8 +2,8 @@
 Spawn, 0, 0
 Character
 Ground, 0, 40 
-Decoration, 2, 29, 1
-Decoration, 30, 29, 2
+Decoration, 2, 33, 1
+Decoration, 30, 33, 2
 Decoration, 10, 23, 3
 Decoration, 50, 5, 4
 Decoration, 4, 39, 5
