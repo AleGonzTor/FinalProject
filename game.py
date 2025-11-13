@@ -4,7 +4,8 @@ import pygame
 
 from sys import exit
 
-pygame.mixer.init()
+from sounds import sound_manager
+
 class Game:
     def __init__(self, maps = None, name = "PVJ"):
         pygame.init()
@@ -84,4 +85,5 @@ class Game:
             scaled = pygame.transform.scale(self.display, self.screen.get_size())
             self.screen.blit(scaled, (0, 0))
             pygame.display.update()
+
 
