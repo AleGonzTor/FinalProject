@@ -122,7 +122,7 @@ class Character(pygame.sprite.Sprite):
                 self.rect.bottom = hit.rect.top
                 self.v_speed = 0
                 self.movement[3] = True
-        self.rect.x += self.h_speed * dt
+        #self.rect.x += self.h_speed * dt
     
     #Este metodo tomará muros, de los que podrías sostenerte y saltar al lado contrario.
     def jumpable_walle_collide(self, wall, dt):
