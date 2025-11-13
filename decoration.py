@@ -4,12 +4,12 @@ import pygame
 class Decoration(Object):
     
     dictionary = { 
-        1: {"picture": "./Sprites/Sign.png", "layer": 1},  
-        2: {"picture": "./Sprites/Burguer.png", "layer": 1},
-        3: {"picture": "./Sprites/Bush.png", "layer": 1},
-        4: {"picture": "./Sprites/Clouds.png", "layer": 1},
-        5: {"picture": "./Sprites/Mushrooms.png", "layer": 1},
-        6: {"picture": "./Sprites/Grass.png", "layer": 1},
+        1: {"picture": "Sign", "layer": 1},  
+        2: {"picture": "Burguer", "layer": 1},
+        3: {"picture": "Bush", "layer": 1},
+        4: {"picture": "Clouds", "layer": 1},
+        5: {"picture": "Mushrooms", "layer": 1},
+        6: {"picture": "Grass", "layer": 1},
         }
 
     def __init__(self, x, y, obj=0):

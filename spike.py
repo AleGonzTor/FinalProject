@@ -3,7 +3,7 @@ from obstacle import *
 
 class Spike(Obstacle): 
 
-    def __init__(self, x, y, speed=3, damage=1, pic="./Sprites/Spike.png" ):
+    def __init__(self, x, y, speed=3, damage=1, pic="Spike" ):
         super().__init__(x, y, speed, pic, damage) 
         self.falling = True  
         # indica si sigue cayendo 

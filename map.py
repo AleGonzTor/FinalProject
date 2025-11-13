@@ -62,7 +62,7 @@ class Map:
                     self.chars.append(Character(self.spawn_point[0], self.spawn_point[1]))
 
                 elif obj_type == "Ground":
-                    x, y = int(parts[1]), int(parts[2])
+                    x, y= int(parts[1]), int(parts[2])
                     self.floor.append(Ground(x, y))
 
                 elif obj_type == "Decoration":
@@ -71,7 +71,7 @@ class Map:
 
                 elif obj_type == "Platform":
                     x, y, w, h = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4])
-                    self.platforms.append(Platform(x, y, w, h, "./Sprites/Platform.png"))
+                    self.platforms.append(Platform(x, y, w, h))
 
                 elif obj_type == "Obstacle_h":
                     x, y = int(parts[1]), int(parts[2])
@@ -83,7 +83,7 @@ class Map:
 
                 elif obj_type == "Slime":
                     x, y, s = int(parts[1]), int(parts[2]), int(parts[3])
-                    self.slime.append(Slime(x, y, s, "./Sprites/Fat_bounce.png"))
+                    self.slime.append(Slime(x, y, s, "Fat_bounce"))
 
                 elif obj_type == "Spike":
                     x, y = int(parts[1]), int(parts[2])

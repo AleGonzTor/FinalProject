@@ -9,7 +9,7 @@ class Object(pygame.sprite.Sprite):
         self.layer = 0
         #Si hay imagen, la carga
         if pic:
-            self.image = pygame.image.load(pic).convert_alpha()
+            self.image = pygame.image.load("./Sprites/" + pic + ".png").convert_alpha()
         #Si no hay imagen, crea un surface
         else:
             self.image = pygame.Surface((18, 18))
