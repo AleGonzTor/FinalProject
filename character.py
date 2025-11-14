@@ -59,47 +59,38 @@ class Character(pygame.sprite.Sprite):
             self.v_speed = self.j_speed
             self.movement[3] = False
 
-    def general_movement(self, platforms, soft_platforms, dt):
-        #Si tiene velocidad, hacemos que se mueva
+    
+    def lateral_movement(self, dt, platforms):
         if self.h_speed != 0:
             self.rect.centerx += self.h_speed * dt
-        
-        #Verificamos la siguiente posición del personaje, es decir lo hacemos moverse, luego ajustaremos su posición en caso hubiese colisión
-
+        hits = pygame.sprite.spritecollide(self, platforms, False)
+        for hit in hits:
+            borders = [abs(hit.rect.left - self.rect.centerx),
+                       abs(hit.rect.right - self.rect.centerx)]
+            if borders[0] < borders[1]:
+                self.rect.right = hit.rect.left
+            elif borders [0] > borders [1]:
+                self.rect.left = hit.rect.right
+            if self.h_speed != 0:
+                self.h_speed = 0
+    def vertical_movement(self, dt, platforms, soft_platforms):
         self.v_speed += self.gravity * dt
         self.rect.centery += self.v_speed * dt
-        
+
         hits = pygame.sprite.spritecollide(self, platforms, False)
-        
+
         for hit in hits:
-            #left, right, up, down
-            borders = [abs(hit.rect.left - self.rect.centerx),
-                       abs(hit.rect.right - self.rect.centerx),
-                       abs(hit.rect.top - self.rect.centery),
+            borders = [abs(hit.rect.top - self.rect.centery),
                        abs(hit.rect.bottom - self.rect.centery)]
-            if borders[2] < borders[3]:
+            if borders [0] < borders[1]:
                 self.rect.bottom = hit.rect.top
-                self.movement[3] = True 
+                self.movement[3] = True
                 if self.v_speed > 0:
                     self.v_speed = 0
-                continue
-            elif borders[2] > borders[3]:
+            elif borders[0] > borders[1]:
                 self.rect.top = hit.rect.bottom
                 if self.v_speed < 0:
                     self.v_speed = 0
-                continue
-            if borders[0] < borders[1]:
-                self.rect.right = hit.rect.left
-                if self.h_speed != 0:
-                    self.h_speed = 0
-                continue
-            elif borders[0] > borders[1]:
-                self.rect.left = hit.rect.right
-                if self.h_speed != 0:
-                    self.h_speed = 0
-                continue
-
-
         hits = pygame.sprite.spritecollide(self, soft_platforms, False)
         
         for hit in hits:
@@ -107,8 +98,10 @@ class Character(pygame.sprite.Sprite):
                 self.rect.bottom = hit.rect.top
                 self.v_speed = 0
                 self.movement[3] = True
-
-    #Este metodo tomará muros, de los que podrías sostenerte y saltar al lado contrario.
+    def general_movement(self, platforms, soft_platforms, dt):
+        #self.lateral_movement(dt, platforms)
+        self.vertical_movement(dt, platforms, soft_platforms)
+        self.lateral_movement(dt, platforms)
     def jumpable_walle_collide(self, wall, dt):
         hits = pygame.sprite.spritecollide(self, wall, False)
         self.is_on_wall = False  # por defecto no está en pared
@@ -234,7 +227,3 @@ class Character(pygame.sprite.Sprite):
             self.rect.top = 0
         elif self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
-
-                                                                                                                                                                                                                
-
-
