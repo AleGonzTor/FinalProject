@@ -32,7 +32,7 @@ class Map:
 
         self.load_map_file(file)
 
-        self.enemies = [ChasingEnemy(x * TILE_SIZE, y * TILE_SIZE, mx, my, self.chars[0], "Slime") for x, y, mx, my in self.enemies_info]
+        self.enemies = [ChasingEnemy(x, y, mx, my, self.chars[0], "Slime") for x, y, mx, my in self.enemies_info]
 
         self.bg = pygame.image.load(self.bg_path).convert()
         self.bg = pygame.transform.scale(self.bg, (WIDTH, HEIGHT))

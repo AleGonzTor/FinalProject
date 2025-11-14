@@ -39,26 +39,29 @@ Spike, 68, 49
 Spike, 69, 49
 Platform, 60, 45, 10, 4
 Platform, 70, 45, 10, 5
+Spike, 80, 49
+Spike, 81, 49
+Spike, 82, 49
+Spike, 83, 49
+Spike, 84, 49
+Spike, 85, 49
+Spike, 86, 49
+Spike, 87, 49
+Spike, 88, 49
+Spike, 89, 49
+Platform, 80, 45, 10, 4
+Platform, 90, 45, 5, 5
 SoftPlat, 96, 50, 10, 1, 1
 SoftPlat, 96, 45, 10, 1, 1
+
 Decoration, 2, 33, 1
 Decoration, 30, 33, 2
 Decoration, 10, 23, 3
 Decoration, 50, 5, 4
 Decoration, 4, 39, 5
 Decoration, 32, 39, 6
-Platform, 20, 36, 10, 1
-Platform, 28, 32, 10, 1
-SoftPlat, 36, 26, 10, 1, 1
-SoftPlat, 36, 20, 10, 1, 1
-Obstacle_v, 39, 10, 10
-
-Spike, 30, 20
-Spike, 31, 20
-Spike, 32, 20
-Spike, 32, 20
-Spike, 33, 20
-Spike, 34, 20
-Spike, 35, 20
-Enemy, 6, 1.5, 50, 70
-Slime, 0, 39, 1
+Obstacle_v, 98, 10, 20
+Obstacle_v, 104, 40, 20
+Obstacle_h, 100, 51, 20
+Enemy, 54, 54, 0, 106
+Slime, 50, 54, 1
