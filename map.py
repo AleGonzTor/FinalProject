@@ -69,7 +69,7 @@ class Map:
                 obj_type = parts[0]
 
                 if obj_type == "Spawn":
-                    self.spawn_point = (int(parts[1]), int(parts[2]))
+                    self.spawn_point = (int(parts[1]) * TILE_SIZE, int(parts[2]) * TILE_SIZE)
 
                 elif obj_type == "Character":
                     self.chars.append(Character(self.spawn_point[0], self.spawn_point[1]))
@@ -87,8 +87,8 @@ class Map:
                     self.platforms.append(Platform(x, y, w, h, "Platform"))
     
                 elif obj_type == "SoftPlat":
-                    x, y, w, h = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4])
-                    self.soft_platforms.append(SoftPlatform(x, y, w, h, "Cloud"))
+                    x, y, w, h, mode = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4]), int(parts[5])
+                    self.soft_platforms.append(SoftPlatform(x, y, w, h, "Cloud", mode))
 
                 elif obj_type == "Obstacle_h":
                     x, y = int(parts[1]), int(parts[2])

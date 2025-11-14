@@ -77,20 +77,6 @@ class Character(pygame.sprite.Sprite):
                        abs(hit.rect.right - self.rect.centerx),
                        abs(hit.rect.top - self.rect.centery),
                        abs(hit.rect.bottom - self.rect.centery)]
-            #if borders[2] == borders[0] or borders[2] == borders[1]:
-            #    if borders[0] < borders[1]:
-            #        self.rect.right = hit.rect.left
-            #    else:
-            #        self.rect.left = hit.rect.right
-            #    continue
-                #self.rect.bottom = hit.rect.top
-            #elif borders[3] == borders[0] or borders[3] == borders[1]:
-            #    if borders[0] < borders[1]:
-            #        self.rect.right = hit.rect.left
-            #    else:
-            #        self.rect.left = hit.rect.right
-            #    continue
-                #self.rect.top = hit.rect.bottom
             if borders[2] < borders[3]:
                 self.rect.bottom = hit.rect.top
                 self.movement[3] = True 
@@ -99,7 +85,7 @@ class Character(pygame.sprite.Sprite):
                 continue
             elif borders[2] > borders[3]:
                 self.rect.top = hit.rect.bottom
-                if self.v_speed != 0:
+                if self.v_speed < 0:
                     self.v_speed = 0
                 continue
             if borders[0] < borders[1]:
@@ -122,75 +108,8 @@ class Character(pygame.sprite.Sprite):
                 self.v_speed = 0
                 self.movement[3] = True
 
-    def horizontal_movement(self, tough_platforms, dt):
-        #Si el personaje está en movimiento, vamos a hacerlo mover, si no se mueve nos ahorramos una multiplicación y una asinación
-        if self.h_speed != 0:
-            self.rect.centerx += self.h_speed * dt
-        
-        #Asignamos a hits los sprites del grupo "tough_platforms" que tengan colisión con el personaje.
-        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
-        
-        #Iteramos colisión por colisión (sprite por sprite)
-        for hit in hits:
-            
-            #Si el personaje viene por la izquierda, su distancia con el borde izquierdo será menor a la distancia del borde derecho con el centro del personaje
-            if self.rect.centerx - hit.rect.left < hit.rect.right - self.rect.centerx:
-                self.rect.right = hit.rect.left
-
-            #Si viene por la derecha pasa lo contrario, podriamos verificar si está andentro que sucede
-            elif self.rect.centerx - hit.rect.left > hit.rect.right - self.rect.centerx:
-                self.rect.left = hit.rect.right
-            
-            #Si de alguna manera está en el centro, es decir se metio dentro del cel objeto, solo lo ponemos arriba
-            else:
-                self.rect.bottom = hit.rect.top
-                
-            #Si se está moviendo y hay colisión, cambiamos la velocidad a 0
-            if self.h_speed != 0:
-                self.h_speed = 0
-    
-    def vertical_movement(self, tough_platforms, dt):
-        #Verificamos la siguiente posición del personaje, es decir lo hacemos moverse, luego ajustaremos su posición en caso hubiese colisión
-
-        self.v_speed += self.gravity * dt
-        self.rect.centery += self.v_speed * dt
-
-        #Lo mismo que antes, es el grupo de las colisiones
-        hits = pygame.sprite.spritecollide(self, tough_platforms, False)
-        
-        for hit in hits:
-            
-            #Si viene por abajo, lo dejamos abajo.
-            if self.rect.centery - hit.rect.top > hit.rect.bottom - self.rect.centery:
-                self.rect.top = hit.rect.bottom
-            
-            #Si viene por arriba, hacemos que se pare encima y le reiniciamos el salto.
-            else:
-                self.rect.bottom = hit.rect.top 
-                self.movement[3] = True 
-
-            #Si estab en movimiento hacemos la reasignación de la velocidad.
-            if self.v_speed != 0:    
-                self.v_speed = 0
-    
- 
-
-
-    #Este metodo toma otro grupo de plataformas, unas que puedes traspasar desde abajo, pero no desde arriba, y hace que al cruzarlas puedas estar sobre ellas, pero no bajar de ellas (por el momento) 
-    def platform_collide (self, platforms, dt):
-        #self.v_speed += self.gravity * dt
-        #self.rect.centery += self.v_speed * dt
-        hits = pygame.sprite.spritecollide(self, platforms, False)
-        for hit in hits:
-            if self.v_speed > 0:
-                self.rect.bottom = hit.rect.top
-                self.v_speed = 0
-                self.movement[3] = True
-        #self.rect.x += self.h_speed * dt
-    
     #Este metodo tomará muros, de los que podrías sostenerte y saltar al lado contrario.
     def jumpable_walle_collide(self, wall, dt):
-        #self.rect.centerx += self.h_speed * dt
         hits = pygame.sprite.spritecollide(self, wall, False)
         self.is_on_wall = False  # por defecto no está en pared
 
@@ -260,9 +179,6 @@ class Character(pygame.sprite.Sprite):
         self.general_movement(platforms, soft_platforms, dt)
         self.general_bounce_colision(slime, dt)
         self.dead_colision(spawn_point, obj_damage)
-    
-    def take_damage(self, damage):
-        self.health -= damage
     
     #Son metodos para modificar atributos privados desde un metodo en lugar de acceder a ellos
     def set_h_speed(self, speed):

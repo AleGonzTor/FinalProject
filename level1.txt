@@ -10,8 +10,8 @@ Decoration, 4, 39, 5
 Decoration, 32, 39, 6
 Platform, 20, 36, 10, 1
 Platform, 28, 32, 10, 1
-SoftPlat, 36, 26, 10, 1
-SoftPlat, 36, 20, 10, 1
+SoftPlat, 36, 26, 10, 1, 1
+SoftPlat, 36, 20, 10, 1, 1
 Obstacle_v, 39, 10, 10
 Spike, 14, 20
 Spike, 15, 20

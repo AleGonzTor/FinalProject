@@ -19,7 +19,7 @@ class Game:
         if maps:
             self.curr_map = maps[self.curr_map_index]
         else:
-            self.curr_map = Map("./level1.txt")
+            self.curr_map = Map("./levelx.txt")
     
         self.characters_list = self.curr_map.get_char()
         self.character = (self.characters_list)[0]
