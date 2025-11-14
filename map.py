@@ -51,7 +51,7 @@ class Map:
 
         self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst)
         
-        self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.enemies)
+        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.enemies)
 
     def load_map_file(self, file):
 

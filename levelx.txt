@@ -53,13 +53,11 @@ Platform, 80, 45, 10, 4
 Platform, 90, 45, 5, 5
 SoftPlat, 96, 50, 10, 1, 1
 SoftPlat, 96, 45, 10, 1, 1
-
-Decoration, 2, 33, 1
-Decoration, 30, 33, 2
-Decoration, 10, 23, 3
-Decoration, 50, 5, 4
-Decoration, 4, 39, 5
-Decoration, 32, 39, 6
+Decoration, 5, 54, 1
+Decoration, 20, 50, 7
+Decoration, 40, 50, 7
+Decoration, 60, 50, 7
+Decoration, 80, 50, 7
 Obstacle_v, 98, 10, 20
 Obstacle_v, 104, 40, 20
 Obstacle_h, 100, 51, 20

@@ -90,8 +90,8 @@ class Game:
             self.sprites.draw(self.display) 
             #self.spikes(self.display)
             ###Estas dos linesas son las que se agregaron
-            self.spikes.draw(self.display)
-            self.enemies.draw(self.display)
+            #self.spikes.draw(self.display)
+            #self.enemies.draw(self.display)
             scaled = pygame.transform.scale(self.display, self.screen.get_size())
             self.screen.blit(scaled, (0, 0))
             pygame.display.update()

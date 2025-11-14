@@ -7,6 +7,7 @@ class SpikeTrap(Object):
     def __init__(self, x, y, gravity=2000, fall_speed=1200, reset_time=2, pic=None, damage=1):
     
         super().__init__(x, y, pic)
+        self.image.fill((50, 0, 0), special_flags=pygame.BLEND_RGBA_ADD)
         self.start_y = self.rect.y  # posición inicial en píxeles
         self.v_speed = 0
         self.gravity = gravity
