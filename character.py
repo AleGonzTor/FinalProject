@@ -5,22 +5,25 @@ from sounds import sound_manager
 
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, x = (TILES_X - 1) * TILE_SIZE, y =(TILES_Y - 1) * TILE_SIZE, picture_path = "./Sprites/Char.png"):
-
-        
+    def __init__(self, x = 0, y = 0, picture_path = "./Sprites/Char.png"):
             
         ###Inicia la superclase
         super().__init__()
 
         #Son las teclas de movimiento y si se están presionando o no, salvo la última que en realidad es para saber si el personaje puede (o no) saltar. Estas se activan mediante la clase game, donde si se presiona x tecla, cambia el estado del movimiento del personaje
         self.movement = [False, False, False, True]
-    
+        
+        #Es el estado en el que se encuentra el personaje, 0 muerto, 1 vivo, puede ser 2 o -1 invulnerable o algo así
+        self.status = 1
 
-        self.health = 1
+        #self.health = 1
+        
         ###Imagen
         self.image = pygame.image.load(picture_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
         ###Hasta acá se define el sprite
+        
+        ######EL SPAWN_POINT DEBE ESTAR EN MAP
         self.spawn_point = (x, y)
         
         ###Estas son aceleraciones que tiene el personaje, sea la gravedad que hace que el personaje siempre esté cayendo, sea la aceleración, que hace que el personaje no esté inmediatamente en su velocidad máxima y el momentum, que es una resistencia que hace que cuando el personaje deje de moverse, este tenga un movimiento de inercia.
@@ -30,7 +33,7 @@ class Character(pygame.sprite.Sprite):
 
         ###Esta es la velocidad del personaje, v_speed es la velocidad vertical que tiene en el momento, si esta es negativa, el personaje salta, como siempre tiene la gravedad así salte, este tiende a ir hacia abajo. h_speed es la velocidad horizontal que tiene en el momento, que se usa en otros metodos para calcular su distancia recorrida por frame, h_max_speed es el máximo de velocidad que puede ganar el personaje, que nos ayudará a limitar su aceleración y que no corra muy rápido, j_speed es la velocidad de su salto, o su fuerza, si es menor, salta más rápido y llega más alto, si es mayor, salta más lento y llega menos alto. 
         self.v_speed = 0
-        self.h_mspeed = 1600
+        self.h_max_speed = 1600
         self.h_speed = 0
 
         self.j_speed = -750
@@ -40,19 +43,84 @@ class Character(pygame.sprite.Sprite):
 
     def mv_left(self, dt): 
         self.h_speed -= self.acceleration * dt
-        if self.h_speed < (self.h_mspeed) * - 1:
-            self.h_speed = (self.h_mspeed) * - 1
+        ###Acá podrían poner algún sonido
+        if self.h_speed < (self.h_max_speed) * - 1:
+            self.h_speed = (self.h_max_speed) * - 1
 
     def mv_right(self, dt): 
         self.h_speed += self.acceleration * dt
-        if self.h_speed > self.h_mspeed:
-            self.h_speed = self.h_mspeed
+        ###Acá podrían poner algún sonido
+        if self.h_speed > self.h_max_speed:
+            self.h_speed = self.h_max_speed
 
     def jump(self):
         if self.movement[3]:
             sound_manager.play("jump")
             self.v_speed = self.j_speed
             self.movement[3] = False
+
+    def general_movement(self, platforms, soft_platforms, dt):
+        #Si tiene velocidad, hacemos que se mueva
+        if self.h_speed != 0:
+            self.rect.centerx += self.h_speed * dt
+        
+        #Verificamos la siguiente posición del personaje, es decir lo hacemos moverse, luego ajustaremos su posición en caso hubiese colisión
+
+        self.v_speed += self.gravity * dt
+        self.rect.centery += self.v_speed * dt
+        
+        hits = pygame.sprite.spritecollide(self, platforms, False)
+        
+        for hit in hits:
+            #left, right, up, down
+            borders = [abs(hit.rect.left - self.rect.centerx),
+                       abs(hit.rect.right - self.rect.centerx),
+                       abs(hit.rect.top - self.rect.centery),
+                       abs(hit.rect.bottom - self.rect.centery)]
+            #if borders[2] == borders[0] or borders[2] == borders[1]:
+            #    if borders[0] < borders[1]:
+            #        self.rect.right = hit.rect.left
+            #    else:
+            #        self.rect.left = hit.rect.right
+            #    continue
+                #self.rect.bottom = hit.rect.top
+            #elif borders[3] == borders[0] or borders[3] == borders[1]:
+            #    if borders[0] < borders[1]:
+            #        self.rect.right = hit.rect.left
+            #    else:
+            #        self.rect.left = hit.rect.right
+            #    continue
+                #self.rect.top = hit.rect.bottom
+            if borders[2] < borders[3]:
+                self.rect.bottom = hit.rect.top
+                self.movement[3] = True 
+                if self.v_speed > 0:
+                    self.v_speed = 0
+                continue
+            elif borders[2] > borders[3]:
+                self.rect.top = hit.rect.bottom
+                if self.v_speed != 0:
+                    self.v_speed = 0
+                continue
+            if borders[0] < borders[1]:
+                self.rect.right = hit.rect.left
+                if self.h_speed != 0:
+                    self.h_speed = 0
+                continue
+            elif borders[0] > borders[1]:
+                self.rect.left = hit.rect.right
+                if self.h_speed != 0:
+                    self.h_speed = 0
+                continue
+
+
+        hits = pygame.sprite.spritecollide(self, soft_platforms, False)
+        
+        for hit in hits:
+            if self.v_speed > 0:
+                self.rect.bottom = hit.rect.top
+                self.v_speed = 0
+                self.movement[3] = True
 
     def horizontal_movement(self, tough_platforms, dt):
         #Si el personaje está en movimiento, vamos a hacerlo mover, si no se mueve nos ahorramos una multiplicación y una asinación
@@ -106,11 +174,7 @@ class Character(pygame.sprite.Sprite):
                 self.v_speed = 0
     
  
-    #Llama a las funciones de movimiento horizontal y vertical en su orden.
-    def normal_movement(self, tough_platforms, dt):
 
-        self.horizontal_movement(tough_platforms, dt)        
-        self.vertical_movement(tough_platforms, dt)
 
     #Este metodo toma otro grupo de plataformas, unas que puedes traspasar desde abajo, pero no desde arriba, y hace que al cruzarlas puedas estar sobre ellas, pero no bajar de ellas (por el momento) 
     def platform_collide (self, platforms, dt):
@@ -180,16 +244,22 @@ class Character(pygame.sprite.Sprite):
     def general_bounce_colision (self, slime, dt):
         self.collision_bounce_vertical(slime, dt)    
         self.collision_bounce_horizontal(slime,dt)
-    
+
 #En esta funcion cada vez que dectecte que la colision del personaje es igual a la del objeto lo llevara al spawn
-    def dead_colision (self, obj_damage):
+    def dead_colision (self, spawn_point, obj_damage):
         hits = pygame.sprite.spritecollide(self, obj_damage, False)
         if hits:
             sound_manager.play("respawn")
-            self.rect.x, self.rect.y = self.spawn_point
+            self.rect.x, self.rect.y = spawn_point
             self.h_speed = 0
             self.v_speed = 0
 
+    #Llama a las funciones de movimiento horizontal y vertical en su orden.
+    def final_movement(self, platforms, soft_platforms, slime, obj_damage, spawn_point, dt):
+
+        self.general_movement(platforms, soft_platforms, dt)
+        self.general_bounce_colision(slime, dt)
+        self.dead_colision(spawn_point, obj_damage)
     
     def take_damage(self, damage):
         self.health -= damage
@@ -204,12 +274,8 @@ class Character(pygame.sprite.Sprite):
     def set_movement(self, key, pressed = False):
         self.movement[key] = pressed
 
-    def update_pos(self, dt, platforms):
+    def update_pos(self, dt, platforms, soft_platforms, slime, obj_damage, spawn_point):
         #Si presionamos "s", si el personaje estaba saltando, dejará de saltar y por el contrario, comenzará a caer más rápido) 
-        if self.health < 1:
-            self.healt = 1
-            self.rect.x, self.rect.y = self.spawn_point
-
         if self.movement[2]:
             if self.v_speed < 0:
                 self.v_speed = 500
@@ -240,17 +306,17 @@ class Character(pygame.sprite.Sprite):
             self.movement[3] = False
         
         #Acá calcularemos las colisiones que se hacen, de modo que calculará la posición siguiente del personaje y luego si no tiene colisión el personaje se moverá donde tiene que ir, sin embargo, si tiene colisión, ajustaremos al personaje para que no se mueva adentro de una plataforma
-        self.normal_movement(platforms, dt)
+        self.final_movement(platforms, soft_platforms, slime, obj_damage, spawn_point, dt)
 
         #Calcula los limites del mapa (DEBEMOS ELIMINAR ESTO, NECESITAMOS CREAR UN METODO QUE CALCULE LOS LIMITES O UNOS MUROS QUE LIMITEN EL MAPA.
 
-        if self.rect.right >= WIDTH:
+        if self.rect.right > WIDTH:
             self.rect.right = WIDTH
-        elif self.rect.left <= 0:
+        elif self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.top <= 0:
+        if self.rect.top < 0:
             self.rect.top = 0
-        elif self.rect.bottom >= HEIGHT:
+        elif self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
 
                                                                                                                                                                                                                 

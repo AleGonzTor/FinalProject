@@ -49,6 +49,8 @@ class Map:
         self.spikes_group = pygame.sprite.Group(self.spikes)
         self.enemies_group = pygame.sprite.Group(self.enemies)  
 
+        self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst)
+        
         self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.enemies)
 
     def load_map_file(self, file):
@@ -119,7 +121,9 @@ class Map:
     #    self.obst_group = pygame.sprite.Group(self.obst)
     #    self.collision_group = pygame.sprite.Group(self.platforms, self.floor)
     #    self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst, self.slime)
-                    
+    def get_spawn_point(self):
+        return self.spawn_point
+
     def get_collision_group(self):
         return self.collision_group
     
@@ -152,3 +156,6 @@ class Map:
 
     def get_enemies(self):
         return self.enemies_group
+
+    def get_damage_group(self):
+        return self.damage_group

@@ -98,9 +98,9 @@ class ChasingEnemy(Object):
                 self.v_speed = 0
 
         # ataque
-        if pygame.sprite.collide_rect(self, self.player):
-            if hasattr(self.player, "take_damage"):
-                self.player.take_damage(self.damage)
+        #if pygame.sprite.collide_rect(self, self.player):
+        #    if hasattr(self.player, "take_damage"):
+        #        self.player.take_damage(self.damage)
         
         # direccion
         if self.original_image:

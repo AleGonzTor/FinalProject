@@ -31,6 +31,7 @@ class Game:
         self.spikes = self.curr_map.get_spikes()
         self.enemies = self.curr_map.get_enemies()
         self.sprites = self.curr_map.get_all()
+        self.damage_group = self.curr_map.get_damage_group()
 
     def main_void(self):
         while True:
@@ -80,10 +81,10 @@ class Game:
                         #self.character.movement[2] = False
                         self.character.set_movement(2)
             
-            self.character.update_pos(dt, self.collission) 
-            self.character.platform_collide(self.soft_platforms, dt)
-            self.character.general_bounce_colision(self.slimes, dt)
-            self.character.dead_colision(self.obstacles) 
+            self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point()) 
+            #self.character.platform_collide(self.soft_platforms, dt)
+            #self.character.general_bounce_colision(self.slimes, dt)
+            #self.character.dead_colision(self.obstacles) 
             self.display.fill((150,200,255))
             self.display.blit(self.curr_map.get_bg(), (0, 0))
             self.sprites.draw(self.display) 

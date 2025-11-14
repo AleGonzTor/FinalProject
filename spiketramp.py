@@ -43,15 +43,15 @@ class SpikeTrap(Object):
                 self.timer = self.reset_time
 
         # Colisión con jugadores
-        for player in Characters:
-         if pygame.sprite.collide_rect(self, player):
-            player.health -= self.damage  # o player.take_damage(self.damage) si defines el método
+        #for player in Characters:
+        # if pygame.sprite.collide_rect(self, player):
+        #    player.health -= self.damage  # o player.take_damage(self.damage) si defines el método
         # Puedes reiniciar al jugador si muere
-        if player.health <= 0:
-            player.rect.topleft = player.spawn_point
-            player.health = 1
-            player.h_speed = 0
-            player.v_speed = 0
+        #if player.health <= 0:
+        #    player.rect.topleft = player.spawn_point
+        #    player.health = 1
+        #    player.h_speed = 0
+        #    player.v_speed = 0
         # Reinicio del pincho
         if not self.falling and self.triggered:
             if self.timer > 0:
