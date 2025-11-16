@@ -37,12 +37,16 @@ class ArrowTrap(Object):
 
             # Colisión con collision
             hits = pygame.sprite.spritecollide(self, collision_group, False)
-            if hits:
-                self.rect.bottom = hits[0].rect.top
+            if hits or self.rect.left < 0:
+                self.rect.right = hits[0].rect.left
                 self.h_speed = 0
                 self.moving = False
                 self.timer = self.reset_time
-
+            if self.rect.right > WIDTH:
+                self.rect.right = WIDTH
+                self.h_speed = 0
+                self.moving = False
+                self.timer = self.reset_time
         # Colisión con jugadores
         #for player in Characters:
         # if pygame.sprite.collide_rect(self, player):

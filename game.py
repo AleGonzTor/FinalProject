@@ -32,8 +32,11 @@ class Game:
         self.soft_platforms = self.curr_map.get_soft_platforms_group()
         self.obstacles = self.curr_map.get_obst()
         self.spikes = self.curr_map.get_spikes()
+        self.arrows = self.curr_map.get_arrows()
         self.enemies = self.curr_map.get_enemies()
+
         self.sprites = self.curr_map.get_all()
+    
         self.damage_group = self.curr_map.get_damage_group()
         self.bg = pygame.transform.scale(self.curr_map.get_bg(), self.display.get_size())
     def main_void(self):
@@ -47,6 +50,8 @@ class Game:
                 obstacle.update()
             for spike in self.spikes: # ACA ESTA LO QUE AGREGARON EN LA CARPETA
                 spike.update(self.collission, self.characters_list, dt)
+            for arrow in self.arrows:
+                arrow.update(self.collission, self.characters_list, dt)
             for enemy in self.curr_map.get_enemies():
                 enemy.update(dt, self.collission) # HASTA AQUI 
             for event in pygame.event.get():
@@ -86,7 +91,7 @@ class Game:
             
             self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point()) 
             ###########################
-            self.camera.centery = self.character.rect.centery - (6 * TILE_SIZE) 
+            self.camera.centery = self.character.rect.centery - (5 * TILE_SIZE) 
             if self.character.h_speed != 0 and self.character.rect.centerx > self.camera.right - (18 * TILE_SIZE):
                 self.camera.right = self.character.rect.centerx + (18 * TILE_SIZE)
             elif self.character.h_speed != 0 and self.character.rect.centerx < self.camera.left + (18 * TILE_SIZE):

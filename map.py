@@ -10,6 +10,7 @@ from spikemanager import *
 from slime import *
 from spiketramp import *
 from enemy import *
+from arrowtramp import *
 
 import pygame
 
@@ -23,13 +24,15 @@ class Map:
         self.soft_platforms = []
         self.obst = []
         self.slime = []
-        
+
         self.spawn_point = (0, 0)
 
         self.spikes_positions = []
         self.spikes = []
+        self.arrows_positions = []
+        self.arrows = []
         self.enemies_info = []
-
+        
         self.load_map_file(file)
 
         self.enemies = [ChasingEnemy(x, y, mx, my, self.chars[0], "Slime") for x, y, mx, my in self.enemies_info]
@@ -48,10 +51,10 @@ class Map:
         self.collision_group = pygame.sprite.Group(self.platforms, self.floor)
         self.spikes_group = pygame.sprite.Group(self.spikes)
         self.enemies_group = pygame.sprite.Group(self.enemies)  
-
-        self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst)
+        self.arrows_group = pygame.sprite.Group(self.arrows)
+        self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst, self.arrows)
         
-        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.enemies)
+        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies)
 
     def load_map_file(self, file):
 
@@ -110,6 +113,10 @@ class Map:
                     x, y, mx, my = float(parts[1]), float(parts[2]), int(parts[3]), int(parts[4])
                     self.enemies_info.append((x,y,mx,my))
 
+                elif obj_type == "Arrow":
+                    x, y = float(parts[1]),  float(parts[2])
+                    self.arrows_positions.append((x,y))
+        self.arrows = [ArrowTrap(x, y, pic="Platform") for x, y in self.arrows_positions]
         self.spikes = [SpikeTrap(x, y, pic="Platform") for x, y in self.spikes_positions]
         
     #def _build_groups(self):
@@ -153,6 +160,9 @@ class Map:
 
     def get_spikes(self):
         return self.spikes_group
+
+    def get_arrows(self):
+        return self.arrows_group
 
     def get_enemies(self):
         return self.enemies_group
