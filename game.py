@@ -87,7 +87,11 @@ class Game:
             self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point()) 
             ###########################
             self.camera.centery = self.character.rect.centery - (6 * TILE_SIZE) 
-            self.camera.centerx = self.character.rect.centerx  
+            if self.character.h_speed != 0 and self.character.rect.centerx > self.camera.right - (18 * TILE_SIZE):
+                self.camera.right = self.character.rect.centerx + (18 * TILE_SIZE)
+            elif self.character.h_speed != 0 and self.character.rect.centerx < self.camera.left + (18 * TILE_SIZE):
+                self.camera.left = self.character.rect.centerx - (18  * TILE_SIZE)
+            
             if self.camera.left < 0:
                 self.camera.left = 0
 
