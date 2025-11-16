@@ -59,7 +59,12 @@ class Character(pygame.sprite.Sprite):
             self.v_speed = self.j_speed
             self.movement[3] = False
 
-    
+    def gety(self):
+        return self.rect.centery
+
+    def getx(self):
+        return self.rect.centerx
+
     def lateral_movement(self, dt, platforms):
         if self.h_speed != 0:
             self.rect.centerx += self.h_speed * dt
@@ -165,6 +170,7 @@ class Character(pygame.sprite.Sprite):
             self.rect.x, self.rect.y = spawn_point
             self.h_speed = 0
             self.v_speed = 0
+            
 
     #Llama a las funciones de movimiento horizontal y vertical en su orden.
     def final_movement(self, platforms, soft_platforms, slime, obj_damage, spawn_point, dt):

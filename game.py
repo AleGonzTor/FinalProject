@@ -11,8 +11,11 @@ class Game:
 
         self.curr_map_index = 0
         
+        
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.display = pygame.Surface((WIDTH, HEIGHT)) ###
+        self.camera = pygame.Rect(0, 0, WIDTH // 2, HEIGHT // 2)
+
         pygame.display.set_caption(name)
         self.clock = pygame.time.Clock()
 
@@ -32,7 +35,7 @@ class Game:
         self.enemies = self.curr_map.get_enemies()
         self.sprites = self.curr_map.get_all()
         self.damage_group = self.curr_map.get_damage_group()
-
+        self.bg = pygame.transform.scale(self.curr_map.get_bg(), self.display.get_size())
     def main_void(self):
         while True:
             dt = self.clock.tick(60) / 1000
@@ -82,17 +85,31 @@ class Game:
                         self.character.set_movement(2)
             
             self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point()) 
-            #self.character.platform_collide(self.soft_platforms, dt)
-            #self.character.general_bounce_colision(self.slimes, dt)
-            #self.character.dead_colision(self.obstacles) 
-            self.display.fill((150,200,255))
-            self.display.blit(self.curr_map.get_bg(), (0, 0))
+            ###########################
+            self.camera.centery = self.character.rect.centery - (6 * TILE_SIZE) 
+            self.camera.centerx = self.character.rect.centerx  
+            if self.camera.left < 0:
+                self.camera.left = 0
+
+            elif self.camera.right > WIDTH:
+                self.camera.right = WIDTH
+
+            if self.camera.top < 0:
+                print(self.camera.top)
+                self.camera.top = 0
+
+            elif self.camera.bottom > TILES_Y * 18:
+                self.camera.bottom = TILES_Y * 18
+                
+            self.display.blit(self.bg, (0, 0))
+            self.camera.clamp_ip(self.display.get_rect())
+
             self.sprites.draw(self.display) 
-            #self.spikes(self.display)
-            ###Estas dos linesas son las que se agregaron
-            #self.spikes.draw(self.display)
-            #self.enemies.draw(self.display)
+
+            visible = self.display.subsurface(self.camera)
             scaled = pygame.transform.scale(self.display, self.screen.get_size())
+
+            scaled = pygame.transform.scale(visible, self.screen.get_size())
             self.screen.blit(scaled, (0, 0))
             pygame.display.update()
 
