@@ -11,12 +11,19 @@ class Character(pygame.sprite.Sprite):
         super().__init__()
 
         #Son las teclas de movimiento y si se están presionando o no, salvo la última que en realidad es para saber si el personaje puede (o no) saltar. Estas se activan mediante la clase game, donde si se presiona x tecla, cambia el estado del movimiento del personaje
-        self.movement = [False, False, False, True]
+        self.movement = [False, False, False, True, False]
         
         #Es el estado en el que se encuentra el personaje, 0 muerto, 1 vivo, puede ser 2 o -1 invulnerable o algo así
         self.status = 1
 
         #self.health = 1
+        
+        #Jetpack
+        self.jetpack_active = False
+        self.jetpack_force = -500
+        self.jetpack_duration = 3
+        self.timer_jp = 0
+        self.jetpack_using = False
         
         ###Imagen
         self.image = pygame.image.load(picture_path).convert_alpha()
@@ -54,7 +61,7 @@ class Character(pygame.sprite.Sprite):
             self.h_speed = self.h_max_speed
 
     def jump(self):
-        if self.movement[3]:
+        if self.movement[3] == True:
             sound_manager.play("jump")
             self.v_speed = self.j_speed
             self.movement[3] = False
@@ -78,8 +85,9 @@ class Character(pygame.sprite.Sprite):
                 self.rect.left = hit.rect.right
             if self.h_speed != 0:
                 self.h_speed = 0
-    def vertical_movement(self, dt, platforms, soft_platforms):
-        self.v_speed += self.gravity * dt
+    def vertical_movement(self, dt, platforms, soft_platforms, wall):
+        if not self.jetpack_using:
+            self.v_speed += self.gravity * dt
         self.rect.centery += self.v_speed * dt
 
         hits = pygame.sprite.spritecollide(self, platforms, False)
@@ -103,9 +111,25 @@ class Character(pygame.sprite.Sprite):
                 self.rect.bottom = hit.rect.top
                 self.v_speed = 0
                 self.movement[3] = True
-    def general_movement(self, platforms, soft_platforms, dt):
+        
+        
+        hits = pygame.sprite.spritecollide(self, wall, False)
+        for hit in hits:
+            borders = [abs(hit.rect.top - self.rect.centery),
+                       abs(hit.rect.bottom - self.rect.centery)]
+            if borders [0] < borders[1]:
+                self.rect.bottom = hit.rect.top
+                self.movement[3] = True
+                if self.v_speed > 0:
+                    self.v_speed = 0
+            elif borders[0] > borders[1]:
+                self.rect.top = hit.rect.bottom
+                if self.v_speed < 0:
+                    self.v_speed = 0
+             
+    def general_movement(self, platforms, soft_platforms, wall, dt):
         #self.lateral_movement(dt, platforms)
-        self.vertical_movement(dt, platforms, soft_platforms)
+        self.vertical_movement(dt, platforms, soft_platforms, wall)
         self.lateral_movement(dt, platforms)
     def jumpable_walle_collide(self, wall, dt):
         hits = pygame.sprite.spritecollide(self, wall, False)
@@ -125,11 +149,9 @@ class Character(pygame.sprite.Sprite):
                 self.wall_side = "left"
                 self.movement[3] = True
                 self.is_on_wall = True
-        if self.is_on_wall and self.v_speed > 0:
-            self.v_speed = min(self.v_speed, 25)  # velocidad de caída lenta
-
-
-        self.vertical_movement(wall, dt)
+                
+            if self.is_on_wall and self.v_speed > 0:
+                self.v_speed = min(self.v_speed, 4)
 #Esta funcion hace que cada ve que se colisione por arribo o abajo cause un rebote
     def collision_bounce_vertical (self, object, dt):
         hits = pygame.sprite.spritecollide(self, object, False)
@@ -170,15 +192,22 @@ class Character(pygame.sprite.Sprite):
             self.rect.x, self.rect.y = spawn_point
             self.h_speed = 0
             self.v_speed = 0
-            
-
+    
+    def jetpack_collision (self, jetpack):
+        hits = pygame.sprite.spritecollide(self, jetpack, False)
+        for hit in hits:
+            if hit.visible:    
+                self.jetpack_active = True
+                self.timer_jp = hit.duration
+                hit.pick()
+                
     #Llama a las funciones de movimiento horizontal y vertical en su orden.
-    def final_movement(self, platforms, soft_platforms, slime, obj_damage, spawn_point, dt):
+    def final_movement(self, platforms, soft_platforms, slime, obj_damage, spawn_point,wall, dt):
 
-        self.general_movement(platforms, soft_platforms, dt)
+        self.general_movement(platforms, soft_platforms, wall, dt)
         self.general_bounce_colision(slime, dt)
         self.dead_colision(spawn_point, obj_damage)
-    
+        self.jumpable_walle_collide(wall, dt)
     #Son metodos para modificar atributos privados desde un metodo en lugar de acceder a ellos
     def set_h_speed(self, speed):
         self.h_speed = speed
@@ -189,9 +218,9 @@ class Character(pygame.sprite.Sprite):
     def set_movement(self, key, pressed = False):
         self.movement[key] = pressed
 
-    def update_pos(self, dt, platforms, soft_platforms, slime, obj_damage, spawn_point):
+    def update_pos(self, dt, platforms, soft_platforms, slime, obj_damage, spawn_point, wall):
         #Si presionamos "s", si el personaje estaba saltando, dejará de saltar y por el contrario, comenzará a caer más rápido) 
-        if self.movement[2]:
+        if self.movement[2] and not self.jetpack_active:
             if self.v_speed < 0:
                 self.v_speed = 500
             else:
@@ -220,8 +249,20 @@ class Character(pygame.sprite.Sprite):
         if self.v_speed > 0:
             self.movement[3] = False
         
+        #Funciones para reconocer W o SPACE para volar en el jetpack
+        if self.jetpack_active and self.movement[4]:  # movement[2] = tecla de "saltar alto / volar"
+            self.jetpack_using = True
+        else:
+            self.jetpack_using = False
+        if self.jetpack_using and self.timer_jp > 0:
+            self.v_speed = self.jetpack_force
+            self.timer_jp -= dt
+            if self.timer_jp <= 0:
+                self.jetpack_active = False
+                self.jetpack_using = False
+            
         #Acá calcularemos las colisiones que se hacen, de modo que calculará la posición siguiente del personaje y luego si no tiene colisión el personaje se moverá donde tiene que ir, sin embargo, si tiene colisión, ajustaremos al personaje para que no se mueva adentro de una plataforma
-        self.final_movement(platforms, soft_platforms, slime, obj_damage, spawn_point, dt)
+        self.final_movement(platforms, soft_platforms, slime, obj_damage, spawn_point,wall ,dt)
 
         #Calcula los limites del mapa (DEBEMOS ELIMINAR ESTO, NECESITAMOS CREAR UN METODO QUE CALCULE LOS LIMITES O UNOS MUROS QUE LIMITEN EL MAPA.
 

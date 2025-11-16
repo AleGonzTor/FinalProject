@@ -11,6 +11,9 @@ from slime import *
 from spiketramp import *
 from enemy import *
 from arrowtramp import *
+from wall import *
+from jetpack import *
+
 
 import pygame
 
@@ -24,6 +27,8 @@ class Map:
         self.soft_platforms = []
         self.obst = []
         self.slime = []
+        self.wall = []
+        self.jetpack = []
 
         self.spawn_point = (0, 0)
 
@@ -53,8 +58,10 @@ class Map:
         self.enemies_group = pygame.sprite.Group(self.enemies)  
         self.arrows_group = pygame.sprite.Group(self.arrows)
         self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst, self.arrows)
+        self.wall_group = pygame.sprite.Group(self.wall)
+        self.jetpack_group = pygame.sprite.Group(self.jetpack)
         
-        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies)
+        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack)
 
     def load_map_file(self, file):
 
@@ -100,6 +107,10 @@ class Map:
                 elif obj_type == "Obstacle_v":
                     x, y = int(parts[1]), int(parts[2])
                     self.obst.append(Obstacle_v(x, y))
+                
+                elif obj_type == "Wall":
+                    x, y, w, h, mode = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4]), int(parts[5])
+                    self.wall.append(Wall(x,y, w, h, "Wall", mode))
 
                 elif obj_type == "Slime":
                     x, y, s = int(parts[1]), int(parts[2]), int(parts[3])
@@ -116,6 +127,11 @@ class Map:
                 elif obj_type == "Arrow":
                     x, y = float(parts[1]),  float(parts[2])
                     self.arrows_positions.append((x,y))
+                
+                elif obj_type == "Jetpack":
+                    x, y = int(parts[1]), int(parts[2])
+                    self.jetpack.append(Jetpack(x,y))
+                    
         self.arrows = [ArrowTrap(x, y, pic="Platform") for x, y in self.arrows_positions]
         self.spikes = [SpikeTrap(x, y, pic="Platform") for x, y in self.spikes_positions]
         
@@ -140,6 +156,9 @@ class Map:
     def get_soft_platforms_group(self):
         return self.soft_platforms_group
 
+    def get_jump_wall (self):
+        return self.wall_group
+    
     def get_decorations(self):
         return self.decorations_group
 
@@ -169,3 +188,6 @@ class Map:
 
     def get_damage_group(self):
         return self.damage_group
+
+    def get_jetpack_group(self):
+        return self.jetpack_group

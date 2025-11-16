@@ -34,7 +34,9 @@ class Game:
         self.spikes = self.curr_map.get_spikes()
         self.arrows = self.curr_map.get_arrows()
         self.enemies = self.curr_map.get_enemies()
-
+        self.wall = self.curr_map.get_jump_wall()
+        self.jetpack = self.curr_map.get_jetpack_group()
+        
         self.sprites = self.curr_map.get_all()
     
         self.damage_group = self.curr_map.get_damage_group()
@@ -54,6 +56,9 @@ class Game:
                 arrow.update(self.collission, self.characters_list, dt)
             for enemy in self.curr_map.get_enemies():
                 enemy.update(dt, self.collission) # HASTA AQUI 
+            for jetpack in self.jetpack:
+                jetpack.update(dt)
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -77,6 +82,9 @@ class Game:
                         self.character.set_movement(2, True)
                     if event.key == pygame.K_w or event.key == pygame.K_SPACE:
                         self.character.jump()
+                    if event.key == pygame.K_SPACE:
+                        self.character.set_movement(4, True)
+
                         
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_a:
@@ -88,8 +96,11 @@ class Game:
                     if event.key == pygame.K_s:
                         #self.character.movement[2] = False
                         self.character.set_movement(2)
+                    if event.key == pygame.K_SPACE:
+                        self.character.set_movement(4)
             
-            self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point()) 
+            self.character.jetpack_collision(self.jetpack)
+            self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point(), self.wall) 
             ###########################
             self.camera.centery = self.character.rect.centery - (5 * TILE_SIZE) 
             if self.character.h_speed != 0 and self.character.rect.centerx > self.camera.right - (18 * TILE_SIZE):
