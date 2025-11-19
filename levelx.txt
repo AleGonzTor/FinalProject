@@ -51,11 +51,11 @@ Spike, 88, 49
 Spike, 89, 49
 Platform, 80, 45, 10, 4
 Platform, 90, 45, 5, 5
-Arrow, 95, 16
-Arrow, 95, 17
-Arrow, 95, 18
-Arrow, 95, 19
-Arrow, 95, 20
+Arrow, 95, 45
+Arrow, 95, 46
+Arrow, 95, 47
+Arrow, 95, 48
+Arrow, 95, 49
 SoftPlat, 96, 50, 10, 1, 1
 SoftPlat, 96, 45, 10, 1, 1
 Wall, 0, 5, 1, 40, 1
@@ -73,3 +73,5 @@ Slime, 50, 54, 1
 Platform, 50, 40, 5, 5
 Platform, 50, 33, 5, 2
 Slime, 20, 44, 1
+Platform, 60, 35, 5, 10
+Platform, 60, 28, 5, 2
