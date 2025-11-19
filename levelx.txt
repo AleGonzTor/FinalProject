@@ -70,3 +70,6 @@ Obstacle_v, 104, 40, 20
 Obstacle_h, 100, 51, 20
 Enemy, 54, 54, 0, 106
 Slime, 50, 54, 1
+Platform, 50, 40, 5, 5
+Platform, 50, 33, 5, 2
+Slime, 20, 44, 1

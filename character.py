@@ -44,7 +44,7 @@ class Character(pygame.sprite.Sprite):
         self.h_speed = 0
 
         self.j_speed = -750
-
+        self.w_holding = False
     #Para definir el movimiento, tiene que ser derecha suma a la posición x y izquierda resta a la posición x
     #Todo esto usa aceleración, pero se está complicando mucho eso de la aceleración, y de todos modos va a ser casi imperceptible
 
@@ -77,11 +77,18 @@ class Character(pygame.sprite.Sprite):
             self.rect.centerx += self.h_speed * dt
         hits = pygame.sprite.spritecollide(self, platforms, False)
         for hit in hits:
-            borders = [abs(hit.rect.left - self.rect.centerx),
-                       abs(hit.rect.right - self.rect.centerx)]
-            if borders[0] < borders[1]:
+            #borders = [abs(hit.rect.left - self.rect.centerx),
+            #           abs(hit.rect.right - self.rect.centerx)]
+            #if borders[0] < borders[1]:
+            #    self.rect.right = hit.rect.left
+            #elif borders [0] > borders [1]:
+            #    self.rect.left = hit.rect.right
+            #if self.h_speed != 0:
+            #    self.h_speed = 0
+            #if self.rect.centerx - hit.rect.centerx < 0:
+            if self.rect.centerx < hit.rect.centerx:
                 self.rect.right = hit.rect.left
-            elif borders [0] > borders [1]:
+            else:
                 self.rect.left = hit.rect.right
             if self.h_speed != 0:
                 self.h_speed = 0
@@ -93,17 +100,29 @@ class Character(pygame.sprite.Sprite):
         hits = pygame.sprite.spritecollide(self, platforms, False)
 
         for hit in hits:
-            borders = [abs(hit.rect.top - self.rect.centery),
-                       abs(hit.rect.bottom - self.rect.centery)]
-            if borders [0] < borders[1]:
+            #borders = [abs(hit.rect.top - self.rect.centery),
+            #           abs(hit.rect.bottom - self.rect.centery)]
+            #if borders [0] < borders[1]:
+            #    self.rect.bottom = hit.rect.top
+            #    self.movement[3] = True
+            #    if self.v_speed > 0:
+            #        self.v_speed = 0
+            #elif borders[0] > borders[1]:
+            #    self.rect.top = hit.rect.bottom
+            #    if self.v_speed < 0:
+            #        self.v_speed = 0
+            #if self.rect.centery - hit.rect.centery < 0:
+            if self.rect.centery < hit.rect.centery:
                 self.rect.bottom = hit.rect.top
                 self.movement[3] = True
-                if self.v_speed > 0:
-                    self.v_speed = 0
-            elif borders[0] > borders[1]:
+                #if self.v_speed > 0:
+                #    self.v_speed = 0
+            else:
                 self.rect.top = hit.rect.bottom
-                if self.v_speed < 0:
-                    self.v_speed = 0
+                #if self.v_speed < 0:
+                #    self.v_speed = 0
+            if self.v_speed != 0:
+                self.v_speed = 0
         hits = pygame.sprite.spritecollide(self, soft_platforms, False)
         
         for hit in hits:
@@ -111,26 +130,39 @@ class Character(pygame.sprite.Sprite):
                 self.rect.bottom = hit.rect.top
                 self.v_speed = 0
                 self.movement[3] = True
-        
-        
+         
         hits = pygame.sprite.spritecollide(self, wall, False)
+        
         for hit in hits:
-            borders = [abs(hit.rect.top - self.rect.centery),
-                       abs(hit.rect.bottom - self.rect.centery)]
-            if borders [0] < borders[1]:
+            #borders = [abs(hit.rect.top - self.rect.centery),
+            #           abs(hit.rect.bottom - self.rect.centery)]
+            #if borders [0] < borders[1]:
+            #    self.rect.bottom = hit.rect.top
+            #    self.movement[3] = True
+            #    if self.v_speed > 0:
+            #        self.v_speed = 0
+            #elif borders[0] > borders[1]:
+            #    self.rect.top = hit.rect.bottom
+            #    if self.v_speed < 0:
+            #        self.v_speed = 0
+            #if self.rect.centery - hit.rect.centery < 0:
+            if self.rect.centery < hit.rect.centery:
                 self.rect.bottom = hit.rect.top
                 self.movement[3] = True
-                if self.v_speed > 0:
-                    self.v_speed = 0
-            elif borders[0] > borders[1]:
+                #if self.v_speed > 0:
+                #    self.v_speed = 0
+            else:
                 self.rect.top = hit.rect.bottom
-                if self.v_speed < 0:
-                    self.v_speed = 0
+                #if self.v_speed < 0:
+                #    self.v_speed = 0
+            if self.v_speed != 0:
+                self.v_speed = 0
              
     def general_movement(self, platforms, soft_platforms, wall, dt):
         #self.lateral_movement(dt, platforms)
         self.vertical_movement(dt, platforms, soft_platforms, wall)
         self.lateral_movement(dt, platforms)
+
     def jumpable_walle_collide(self, wall, dt):
         hits = pygame.sprite.spritecollide(self, wall, False)
         self.is_on_wall = False  # por defecto no está en pared
@@ -158,32 +190,67 @@ class Character(pygame.sprite.Sprite):
 
         for hit in hits:
             # Solo rebota si viene cayendo (v_speed > 0)
-            if self.v_speed > 0 and self.rect.bottom <= hit.rect.bottom:
-                self.rect.bottom = hit.rect.top
-                self.v_speed = -abs(self.v_speed) * 0.9
-                sound_manager.play("bounce")
+            #if self.v_speed > 0 and self.rect.bottom <= hit.rect.bottom:
+            #    self.rect.bottom = hit.rect.top
+            #    self.v_speed = -abs(self.v_speed) * 0.9
+            #    sound_manager.play("bounce")
             # Solo rebota si salta (v_speed < 0)
-            if self.v_speed < 0 and self.rect.top >= hit.rect.top:
+            #if self.v_speed < 0 and self.rect.top >= hit.rect.top:
+            #    self.rect.top = hit.rect.bottom
+            #    self.v_speed = abs(self.v_speed) * 0.9
+            #    sound_manager.play("bounce")
+            if self.rect.centery < hit.rect.centery:
+                self.rect.bottom = hit.rect.top
+            elif self.rect.centery > hit.rect.centery:
                 self.rect.top = hit.rect.bottom
-                self.v_speed = abs(self.v_speed) * 0.9
+            if self.v_speed != 0:
+                self.v_speed = int(self.v_speed * -0.9)
                 sound_manager.play("bounce")
+
 #Esta funcion lo mismo pero horizontal                
     def collision_bounce_horizontal (self, object, dt):
         hits = pygame.sprite.spritecollide(self, object, False)
 
         for hit in hits:   
             #Si va a la derecha (self.h_speed > 0)
-            if self.h_speed > 0 and self.rect.right <= hit.rect.right:
+            #if self.h_speed > 0 and self.rect.right <= hit.rect.right:
+            #    self.rect.right = hit.rect.left
+            #    self.h_speed = -abs(self.h_speed) * 0.7
+            #if self.h_speed < 0 and self.rect.left >= hit.rect.left:
+            #    self.rect.left = hit.rect.right
+            #    self.h_speed = abs(self.h_speed) * 0.7
+            if self.rect.centerx < hit.rect.centerx:
                 self.rect.right = hit.rect.left
-                self.h_speed = -abs(self.h_speed) * 0.7
-            if self.h_speed < 0 and self.rect.left >= hit.rect.left:
+            else:
                 self.rect.left = hit.rect.right
-                self.h_speed = abs(self.h_speed) * 0.7
+            #if self.h_speed != 0:
+            self.h_speed = int(self.h_speed * -0.7)
 #Llama a las dos                
     def general_bounce_colision (self, slime, dt):
-        self.collision_bounce_vertical(slime, dt)    
-        self.collision_bounce_horizontal(slime,dt)
+        #self.collision_bounce_vertical(slime, dt)    
+        #self.collision_bounce_horizontal(slime,dt)
+        hits = pygame.sprite.spritecollide(self, slime, False)
+        for hit in hits:
+            borders = [abs(self.rect.right - hit.rect.left),
+                       abs(self.rect.left - hit.rect.right),
+                       abs(self.rect.top - hit.rect.bottom),
+                       abs(self.rect.bottom - hit.rect.top)]
+            if min(borders) == borders[0]:
+                self.rect.right = hit.rect.left
+                self.h_speed = int(self.h_speed * -0.7)
+            elif min(borders)== borders[1]:
+                self.rect.left = hit.rect.right
+                self.h_speed = int(self.h_speed * -0.7)
+            elif min(borders) == borders[2]:
+                self.rect.top = hit.rect.bottom
+                self.v_speed = int(self.v_speed * -0.9)
+            else:
+                self.rect.bottom = hit.rect.top
+                self.v_speed = int(self.v_speed * -0.9)
+            if self.v_speed != 0 or abs(self.h_speed) > 40:
+                sound_manager.play("bounce")
 
+        #self.collision_bounce_vertical(slime, dt)
 #En esta funcion cada vez que dectecte que la colision del personaje es igual a la del objeto lo llevara al spawn
     def dead_colision (self, spawn_point, obj_damage):
         hits = pygame.sprite.spritecollide(self, obj_damage, False)
@@ -242,8 +309,12 @@ class Character(pygame.sprite.Sprite):
         else:
             if self.h_speed < 0:   
                 self.h_speed += self.momentum * dt
+                if self.h_speed > 0:
+                    self.h_speed = 0
             elif self.h_speed > 0:
                 self.h_speed -= self.momentum * dt
+                if self.h_speed < 0:
+                    self.h_speed = 0
 
         #Si el personaje esta cayendo, no podrá saltar, por ende sabemos que nuestro personaje solo salta cuando está encima de una plataforma o si modificamos este estado de salto
         if self.v_speed > 0:
