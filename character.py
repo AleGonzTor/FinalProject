@@ -20,7 +20,7 @@ class Character(pygame.sprite.Sprite):
         
         #Jetpack
         self.jetpack_active = False
-        self.jetpack_force = -500
+        self.jetpack_force = -150
         self.jetpack_duration = 3
         self.timer_jp = 0
         self.jetpack_using = False
@@ -345,3 +345,4 @@ class Character(pygame.sprite.Sprite):
             self.rect.top = 0
         elif self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
+
