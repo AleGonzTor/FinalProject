@@ -10,6 +10,11 @@ class Game:
         pygame.init()
 
         self.curr_map_index = 0
+
+         #TIMER 
+        self.TIME_LIMIT = 60000  # 60 segundos
+        self.start_time = pygame.time.get_ticks()
+        self.game_over = False
         
         
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -41,9 +46,41 @@ class Game:
     
         self.damage_group = self.curr_map.get_damage_group()
         self.bg = pygame.transform.scale(self.curr_map.get_bg(), self.display.get_size())
+        #mostrar game over
+        def mostrar_game_over(self):
+        font = pygame.font.Font(None, 120)
+        texto = font.render("PERDISTE", True, (255, 0, 0))
+
+    # Mostrar mensaje sobre la pantalla
+        self.screen.fill((0, 0, 0))
+        self.screen.blit(texto, (self.screen.get_width()//2 - 200, self.screen.get_height()//2 - 60))
+        pygame.display.update()
+
+        pygame.time.delay(3000)  # Espera 3 segundos
+        pygame.quit()
+        exit()
+    def dibujar_timer(self, remaining):
+        font = pygame.font.Font(None, 50)
+        segundos = max(0, remaining // 1000)  # Convertir ms a segundos
+        texto = font.render(f"Tiempo: {segundos}", True, (0, 0, 0))
+        
+        self.screen.blit(texto, (20, 20))
+        
     def main_void(self):
         while True:
             dt = self.clock.tick(60) / 1000
+            
+             #TIMER CHECK 
+            current_time = pygame.time.get_ticks()
+            elapsed = current_time - self.start_time
+            remaining = self.TIME_LIMIT - elapsed
+            if remaining <= 0:
+                self.game_over = True
+
+            if self.game_over:
+                self.mostrar_game_over()
+                continue
+                
             #collision_group = self.curr_map.get_collision_group()
             #self.spikes.update(self.platforms, self.characters_list)
             for slime in self.slimes:
@@ -133,5 +170,7 @@ class Game:
 
             scaled = pygame.transform.scale(visible, self.screen.get_size())
             self.screen.blit(scaled, (0, 0))
+            self.dibujar_timer(remaining)
             pygame.display.update()
+
 
