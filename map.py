@@ -13,7 +13,7 @@ from enemy import *
 from arrowtramp import *
 from wall import *
 from jetpack import *
-
+from retractable_spike import *
 
 import pygame
 
@@ -37,7 +37,8 @@ class Map:
         self.arrows_positions = []
         self.arrows = []
         self.enemies_info = []
-        
+        self.retractable_spikes = []
+
         self.load_map_file(file)
 
         self.enemies = [ChasingEnemy(x, y, mx, my, self.chars[0], "Slime") for x, y, mx, my in self.enemies_info]
@@ -60,6 +61,7 @@ class Map:
         self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst, self.arrows)
         self.wall_group = pygame.sprite.Group(self.wall)
         self.jetpack_group = pygame.sprite.Group(self.jetpack)
+        self.retractable_spikes_group = pygame.sprite.Group(self.retractable_spikes)
         
         self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack)
 
@@ -131,6 +133,11 @@ class Map:
                 elif obj_type == "Jetpack":
                     x, y = int(parts[1]), int(parts[2])
                     self.jetpack.append(Jetpack(x,y))
+                
+                elif obj_type == "SpikeR":
+                    x, y, up, down = float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])
+                    spike = RetractableSpike(x, y, up_time=up, down_time=down, pic="Platform")
+                    self.retractable_spikes.append(spike)
                     
         self.arrows = [ArrowTrap(x, y, pic="Platform") for x, y in self.arrows_positions]
         self.spikes = [SpikeTrap(x, y, pic="Platform") for x, y in self.spikes_positions]
