@@ -69,7 +69,8 @@ Obstacle_v, 104, 40, 20
 Obstacle_h, 100, 51, 20
 Enemy, 54, 54, 0, 106
 Slime, 50, 54, 1
-SoftPlat, 0, 5, 10, 1, 1
+SoftPlat, 0, 1, 8, 1, 1
+Wall, 0, 2, 2, 15, 2
 Wall, 25, 16, 5, 5, 2
 Wall, 15, 5, 5, 5, 2
 Platform, 60, 20, 5, 5

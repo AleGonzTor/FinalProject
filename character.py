@@ -349,6 +349,7 @@ class Character(pygame.sprite.Sprite):
         elif self.rect.left < 0:
             self.rect.left = 0
         if self.rect.top < 0:
+            self.v_speed = 0
             self.rect.top = 0
         elif self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
