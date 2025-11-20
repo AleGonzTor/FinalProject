@@ -140,7 +140,7 @@ class Game:
                         self.character.set_movement(4)
             
             self.character.jetpack_collision(self.jetpack)
-            self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point(), self.wall) 
+            self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point(), self.wall, self.flags) 
             for flag in self.flags:
                 if self.character.rect.colliderect(flag.rect):
                     self.character.level_complete = True
@@ -172,7 +172,7 @@ class Game:
             self.camera.clamp_ip(self.display.get_rect())
 
             self.sprites.draw(self.display) 
-            self.curr_map.retractable_spikes_group.draw(self.display) 
+            #self.curr_map.retractable_spikes_group.draw(self.display) 
             
             visible = self.display.subsurface(self.camera)
             scaled = pygame.transform.scale(self.display, self.screen.get_size())

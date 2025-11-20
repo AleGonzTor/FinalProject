@@ -3,7 +3,7 @@ from obj import *
 from constants import *
 
 class RetractableSpike(Object):
-    def __init__(self, x, y, up_time=1.5, down_time=1.5, pic="Platform", damage=1):
+    def __init__(self, x, y, up_time=1.5, down_time=1.5, pic="Spike", damage=1):
         super().__init__(x, y, pic)
 
         # Posición base

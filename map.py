@@ -66,7 +66,7 @@ class Map:
         self.retractable_spikes_group = pygame.sprite.Group(self.retractable_spikes)
         self.flag_group = pygame.sprite.Group(self.flags)
         
-        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack, self.flags)
+        self.all_sprites = pygame.sprite.Group(self. decorations, self.retractable_spikes, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack, self.flags)
 
     def load_map_file(self, file):
 
@@ -139,7 +139,7 @@ class Map:
                 
                 elif obj_type == "SpikeR":
                     x, y, up, down = float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])
-                    spike = RetractableSpike(x, y, up_time=up, down_time=down, pic="Platform")
+                    spike = RetractableSpike(x, y, up_time=up, down_time=down)
                     self.retractable_spikes.append(spike)
                     
                 elif obj_type == "Flag":
