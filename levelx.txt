@@ -58,8 +58,7 @@ Arrow, 95, 48
 Arrow, 95, 49
 SoftPlat, 96, 50, 10, 1, 1
 SoftPlat, 96, 45, 10, 1, 1
-Wall, 0, 5, 1, 40, 1
-Jetpack, 1, 44
+Jetpack, 49, 44
 Decoration, 5, 54, 1
 Decoration, 20, 50, 7
 Decoration, 40, 50, 7
@@ -70,12 +69,20 @@ Obstacle_v, 104, 40, 20
 Obstacle_h, 100, 51, 20
 Enemy, 54, 54, 0, 106
 Slime, 50, 54, 1
+SoftPlat, 0, 5, 10, 1, 1
+Wall, 30, 20, 5, 5, 2
+Platform, 60, 20, 5, 5
+Platform, 60, 13, 5, 2
+Platform, 50, 25, 5, 5
+Platform, 50, 18, 5, 2
+Platform, 40, 30, 5, 15
+Platform, 40, 23, 5, 2
 Platform, 50, 35, 5, 10
 Platform, 50, 28, 5, 2
 Platform, 60, 40, 5, 5
 Platform, 60, 33, 5, 2
-Slime, 20, 44, 1
-Platform, 1, 60, 1, 10
+Enemy, 20, 44, 0, 106
+Platform, 2, 30, 38, 1
 SpikeR, 70, 45, 1.2, 1.2
 SpikeR, 71, 45, 1.2, 1.2
 SpikeR, 72, 45, 1.2, 1.2

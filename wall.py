@@ -27,10 +27,13 @@ class Wall (Object):
                 if h_tiles > 1:    
                     self.image.blit(self.image_bot, ( j *TILE_SIZE ,(h_tiles-1)*TILE_SIZE))
         else:
+            self.image_top = pygame.image.load(f"./Sprites/{obj_name}_Top.png").convert_alpha()
+            self.image_mid = pygame.image.load(f"./Sprites/{obj_name}.png")
+            self.image_bot = pygame.image.load(f"./Sprites/{obj_name}_Bot.png").convert_alpha()
             self.image_top_left = pygame.image.load(f"./Sprites/{obj_name}_TopLeft.png").convert_alpha()            
             self.image_top_right = pygame.image.load(f"./Sprites/{obj_name}_TopRight.png").convert_alpha()
             self.image_mid_left = pygame.image.load(f"./Sprites/{obj_name}_Left.png").convert_alpha()
-            self.image_mid_right = pygame.image.load(f"./Sprites/{obj_name}_Left.png").convert_alpha()
+            self.image_mid_right = pygame.image.load(f"./Sprites/{obj_name}_Right.png").convert_alpha()
             self.image_bot_left  = pygame.image.load(f"./Sprites/{obj_name}_BotLeft.png").convert_alpha()
             self.image_bot_right = pygame.image.load(f"./Sprites/{obj_name}_BotRight.png").convert_alpha()
             self.image = pygame.Surface((w_tiles * TILE_SIZE, h_tiles * TILE_SIZE), pygame.SRCALPHA)
