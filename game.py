@@ -7,7 +7,7 @@ from sys import exit
 from sounds import sound_manager
 from game_completed import mostrar_ventana_ganaste
 class Game:
-    def __init__(self, maps = None, name = "Puch"):
+    def __init__(self, maps = None, name = "Puchipu's Adventure"):
         pygame.init()
 
         self.curr_map_index = 0
