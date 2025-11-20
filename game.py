@@ -48,8 +48,8 @@ class Game:
     
         self.damage_group = self.curr_map.get_damage_group()
         self.bg = pygame.transform.scale(self.curr_map.get_bg(), self.display.get_size())
-        #mostrar game over
-        def mostrar_game_over(self):
+        
+    def mostrar_game_over(self):
         font = pygame.font.Font(None, 120)
         texto = font.render("PERDISTE", True, (255, 0, 0))
 
@@ -181,6 +181,7 @@ class Game:
             self.screen.blit(scaled, (0, 0))
             self.dibujar_timer(remaining)
             pygame.display.update()
+
 
 
 
