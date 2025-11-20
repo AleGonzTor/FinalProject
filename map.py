@@ -14,6 +14,7 @@ from arrowtramp import *
 from wall import *
 from jetpack import *
 from retractable_spike import *
+from flag import*
 
 import pygame
 
@@ -29,6 +30,7 @@ class Map:
         self.slime = []
         self.wall = []
         self.jetpack = []
+        self.flags = []
 
         self.spawn_point = (0, 0)
 
@@ -62,8 +64,9 @@ class Map:
         self.wall_group = pygame.sprite.Group(self.wall)
         self.jetpack_group = pygame.sprite.Group(self.jetpack)
         self.retractable_spikes_group = pygame.sprite.Group(self.retractable_spikes)
+        self.flag_group = pygame.sprite.Group(self.flags)
         
-        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack)
+        self.all_sprites = pygame.sprite.Group(self. decorations, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack, self.flags)
 
     def load_map_file(self, file):
 
@@ -139,6 +142,10 @@ class Map:
                     spike = RetractableSpike(x, y, up_time=up, down_time=down, pic="Platform")
                     self.retractable_spikes.append(spike)
                     
+                elif obj_type == "Flag":
+                    x, y = int(parts[1]), int(parts[2])
+                    self.flags.append(Flag(x,y, pic = "Flag"))
+                    
         self.arrows = [ArrowTrap(x, y, pic="Platform") for x, y in self.arrows_positions]
         self.spikes = [SpikeTrap(x, y, pic="Platform") for x, y in self.spikes_positions]
         
@@ -197,4 +204,8 @@ class Map:
         return self.damage_group
 
     def get_jetpack_group(self):
+
         return self.jetpack_group
+        
+    def get_flag_group(self):
+        return self.flag_group
