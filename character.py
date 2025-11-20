@@ -259,7 +259,13 @@ class Character(pygame.sprite.Sprite):
             self.rect.x, self.rect.y = spawn_point
             self.h_speed = 0
             self.v_speed = 0
-    
+    def flag_collision(self, flags):
+        hits = pygame.sprite.spritecollide(self, flags, False)
+        for flag in hits:
+            if not flag.activated:
+                flag.activated = True   
+                self.level_complete = True   
+                
     def jetpack_collision (self, jetpack):
         hits = pygame.sprite.spritecollide(self, jetpack, False)
         for hit in hits:
@@ -285,7 +291,7 @@ class Character(pygame.sprite.Sprite):
     def set_movement(self, key, pressed = False):
         self.movement[key] = pressed
 
-    def update_pos(self, dt, platforms, soft_platforms, slime, obj_damage, spawn_point, wall):
+    def update_pos(self, dt, platforms, soft_platforms, slime, obj_damage, spawn_point, wall, flags):
         #Si presionamos "s", si el personaje estaba saltando, dejará de saltar y por el contrario, comenzará a caer más rápido) 
         if self.movement[2] and not self.jetpack_active:
             if self.v_speed < 0:
@@ -334,6 +340,7 @@ class Character(pygame.sprite.Sprite):
             
         #Acá calcularemos las colisiones que se hacen, de modo que calculará la posición siguiente del personaje y luego si no tiene colisión el personaje se moverá donde tiene que ir, sin embargo, si tiene colisión, ajustaremos al personaje para que no se mueva adentro de una plataforma
         self.final_movement(platforms, soft_platforms, slime, obj_damage, spawn_point,wall ,dt)
+        self.flag_collision(flags)
 
         #Calcula los limites del mapa (DEBEMOS ELIMINAR ESTO, NECESITAMOS CREAR UN METODO QUE CALCULE LOS LIMITES O UNOS MUROS QUE LIMITEN EL MAPA.
 
@@ -345,4 +352,5 @@ class Character(pygame.sprite.Sprite):
             self.rect.top = 0
         elif self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT                                                                                                                                                                                                                        
+
 
