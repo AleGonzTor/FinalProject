@@ -26,9 +26,10 @@ class Game:
         self.clock = pygame.time.Clock()
 
         if maps:
-            self.curr_map = maps[self.curr_map_index]
+            self.curr_map_path = maps[self.curr_map_index]
         else:
-            self.curr_map = Map("./levelx.txt")
+            self.curr_map_path = "./levelx.txt"
+        self.curr_map = Map(self.curr_map_path)
     
         self.characters_list = self.curr_map.get_char()
         self.character = (self.characters_list)[0]
@@ -67,10 +68,53 @@ class Game:
         texto = font.render(f"Tiempo: {segundos}", True, (0, 0, 0))
         
         self.screen.blit(texto, (20, 20))
-        
+
+    def del_map(self):
+        del self.curr_map
+        for x in self.characters_list:
+            del x
+        self.characters_list = None
+        del self.character
+        self.slimes.empty()# = self.curr_map.get_slime()
+        self.collission.empty()# = self.curr_map.get_collision_group()
+        self.platforms.empty()# = self.curr_map.get_platforms_group()
+        self.soft_platforms.empty()# = self.curr_map.get_soft_platforms_group()
+        self.obstacles.empty()# = self.curr_map.get_obst()
+        self.spikes.empty()# = self.curr_map.get_spikes()
+        self.arrows.empty()# = self.curr_map.get_arrows()
+        self.enemies.empty()# = self.curr_map.get_enemies()
+        self.wall.empty()# = self.curr_map.get_jump_wall()
+        self.jetpack.empty()# = self.curr_map.get_jetpack_group()
+        self.flags.empty()# = self.curr_map.get_flag_group()
+        self.sprites.empty()# = self.curr_map.get_all()
+        self.damage_group.empty()# = self.curr_map.get_damage_group()
+
+    def charge_map(self):
+        self.curr_map = Map(self.curr_map_path)
+        self.characters_list = self.curr_map.get_char()
+        self.character = (self.characters_list)[0]
+        self.slimes = self.curr_map.get_slime()
+        self.collission = self.curr_map.get_collision_group()
+        self.platforms = self.curr_map.get_platforms_group()
+        self.soft_platforms = self.curr_map.get_soft_platforms_group()
+        self.obstacles = self.curr_map.get_obst()
+        self.spikes = self.curr_map.get_spikes()
+        self.arrows = self.curr_map.get_arrows()
+        self.enemies = self.curr_map.get_enemies()
+        self.wall = self.curr_map.get_jump_wall()
+        self.jetpack = self.curr_map.get_jetpack_group()
+        self.flags = self.curr_map.get_flag_group()
+        self.sprites = self.curr_map.get_all()
+        self.damage_group = self.curr_map.get_damage_group()
+
     def main_void(self):
         while True:
+            if self.character.status == 0:
+                self.del_map()
+                self.charge_map()
+                self.camera.center = self.character.rect.center
             dt = self.clock.tick(60) / 1000
+
             
              #TIMER CHECK 
             current_time = pygame.time.get_ticks()

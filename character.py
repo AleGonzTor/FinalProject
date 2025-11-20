@@ -259,6 +259,7 @@ class Character(pygame.sprite.Sprite):
             self.rect.x, self.rect.y = spawn_point
             self.h_speed = 0
             self.v_speed = 0
+            self.status = 0
     def flag_collision(self, flags):
         hits = pygame.sprite.spritecollide(self, flags, False)
         for flag in hits:
