@@ -70,17 +70,18 @@ Obstacle_h, 100, 51, 20
 Enemy, 54, 54, 0, 106
 Slime, 50, 54, 1
 SoftPlat, 0, 5, 10, 1, 1
-Wall, 30, 20, 5, 5, 2
+Wall, 25, 16, 5, 5, 2
+Wall, 15, 5, 5, 5, 2
 Platform, 60, 20, 5, 5
 Platform, 60, 13, 5, 2
 Platform, 50, 25, 5, 5
 Platform, 50, 18, 5, 2
 Platform, 40, 30, 5, 15
-Platform, 40, 23, 5, 2
+#Platform, 40, 23, 5, 2
 Platform, 50, 35, 5, 10
-Platform, 50, 28, 5, 2
+#Platform, 50, 28, 5, 2
 Platform, 60, 40, 5, 5
-Platform, 60, 33, 5, 2
+#Platform, 60, 33, 5, 2
 Enemy, 20, 44, 0, 106
 Platform, 2, 30, 38, 1
 SpikeR, 70, 45, 1.2, 1.2
