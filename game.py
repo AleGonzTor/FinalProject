@@ -5,6 +5,7 @@ import pygame
 from sys import exit
 
 from sounds import sound_manager
+from game_completed import mostrar_ventana_ganaste
 class Game:
     def __init__(self, maps = None, name = "PVJ"):
         pygame.init()
@@ -41,6 +42,7 @@ class Game:
         self.enemies = self.curr_map.get_enemies()
         self.wall = self.curr_map.get_jump_wall()
         self.jetpack = self.curr_map.get_jetpack_group()
+        self.flags = self.curr_map.get_flag_group()
         
         self.sprites = self.curr_map.get_all()
     
@@ -139,6 +141,13 @@ class Game:
             
             self.character.jetpack_collision(self.jetpack)
             self.character.update_pos(dt, self.collission, self.soft_platforms, self.slimes, self.damage_group, self.curr_map.get_spawn_point(), self.wall) 
+            for flag in self.flags:
+                if self.character.rect.colliderect(flag.rect):
+                    self.character.level_complete = True
+                    pygame.mixer.music.stop()
+                    sound_manager.play("win")
+                    mostrar_ventana_ganaste(self.screen)
+                    break
             ###########################
             self.camera.centery = self.character.rect.centery - (5 * TILE_SIZE) 
             if self.character.h_speed != 0 and self.character.rect.centerx > self.camera.right - (18 * TILE_SIZE):
@@ -172,5 +181,6 @@ class Game:
             self.screen.blit(scaled, (0, 0))
             self.dibujar_timer(remaining)
             pygame.display.update()
+
 
 
