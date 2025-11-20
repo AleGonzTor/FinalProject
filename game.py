@@ -58,7 +58,8 @@ class Game:
                 enemy.update(dt, self.collission) # HASTA AQUI 
             for jetpack in self.jetpack:
                 jetpack.update(dt)
-            
+            for r_spike in self.curr_map.retractable_spikes:
+                r_spike.update(self.collission, self.characters_list, dt)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -125,7 +126,8 @@ class Game:
             self.camera.clamp_ip(self.display.get_rect())
 
             self.sprites.draw(self.display) 
-
+            self.curr_map.retractable_spikes_group.draw(self.display) 
+            
             visible = self.display.subsurface(self.camera)
             scaled = pygame.transform.scale(self.display, self.screen.get_size())
 
