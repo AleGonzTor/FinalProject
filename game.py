@@ -18,6 +18,7 @@ class Game:
         self.game_over = False
         
         
+        #self.screen = pygame.display.set_mode((960, 540), pygame.RESIZABLE)
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.display = pygame.Surface((WIDTH, HEIGHT)) ###
         self.camera = pygame.Rect(0, 0, WIDTH // 2, HEIGHT // 2)
@@ -49,7 +50,9 @@ class Game:
     
         self.damage_group = self.curr_map.get_damage_group()
         self.bg = pygame.transform.scale(self.curr_map.get_bg(), self.display.get_size())
-        
+        self.timer = pygame.Surface((3 * TILE_SIZE, TILE_SIZE), pygame.SRCALPHA)
+
+
     def mostrar_game_over(self):
         font = pygame.font.Font(None, 120)
         texto = font.render("PERDISTE", True, (255, 0, 0))
@@ -63,12 +66,18 @@ class Game:
         pygame.quit()
         exit()
     def dibujar_timer(self, remaining):
-        font = pygame.font.Font(None, 50)
+        #font = pygame.font.Font(None, 50)
+        self.timer.fill((0, 0, 0, 0)) 
         segundos = max(0, remaining // 1000)  # Convertir ms a segundos
-        texto = font.render(f"Tiempo: {segundos}", True, (0, 0, 0))
+        #texto = font.render(f"Tiempo: {segundos}", True, (0, 0, 0))
         
-        self.screen.blit(texto, (20, 20))
+        for i in range(len(str(segundos))):
+            num = pygame.image.load("./Sprites/" + str(segundos)[i] + ".png").convert_alpha()
+            #num = pygame.transform.scale(num, (4 * TILE_SIZE, 4 * TILE_SIZE))
+            self.timer.blit(num, (i * TILE_SIZE, 0))
 
+        #self.screen.blit(texto, (20, 20))
+        #return segundos
     def del_map(self):
         del self.curr_map
         for x in self.characters_list:
@@ -213,11 +222,13 @@ class Game:
                 self.camera.bottom = TILES_Y * 18
                 
             self.display.blit(self.bg, (0, 0))
+            #self.display.blit(self.timer, (self.camera.right - self.timer.get_width(), self.camera.top))
             self.camera.clamp_ip(self.display.get_rect())
 
             self.sprites.draw(self.display) 
+            self.display.blit(self.timer, (self.camera.right - self.timer.get_width(), self.camera.top))
             #self.curr_map.retractable_spikes_group.draw(self.display) 
-            
+            #self.camera.blit(self.timer, (self.camera.width, 0))
             visible = self.display.subsurface(self.camera)
             scaled = pygame.transform.scale(self.display, self.screen.get_size())
 
