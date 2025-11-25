@@ -15,18 +15,18 @@ class Decoration(Object):
         }
 
     def __init__(self, x, y, obj=0):
-        # Busca la configuración del tipo de decoración
+        
         config = self.dictionary.get(obj)
 
         if config:
             super().__init__(x, y, config["picture"])
             self.layer = config["layer"]
         else:
-            # Si no existe el tipo, crea un cuadrado gris
+            
             super().__init__(x, y)
             self.layer = 0
         if obj == 7:
-            #self.tile_image = pygame.image.load("./Sprites/" + config["picture"] + ".png")
+            
             self.tile_image = self.image
             self.image = pygame.Surface((10 * TILE_SIZE, 5 * TILE_SIZE), pygame.SRCALPHA)
 

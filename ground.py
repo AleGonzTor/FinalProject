@@ -3,7 +3,6 @@ from constants import *
 import pygame
 
 class Ground(Object):
-#    def __init__(self, x, y, w_tiles = WIDTH, h_tiles = 1, picture = "./Sprites/Floor.png"):
 
     def __init__(self, x, y, w_tiles = TILES_X, h_tiles = None, picture = "Floor"):
         super().__init__(x, y, picture)

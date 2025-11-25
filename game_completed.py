@@ -1,13 +1,10 @@
 import pygame
 
-
 def mostrar_ventana_ganaste(screen):
-    pygame.init()
     WIDTH, HEIGHT = screen.get_size()
     font = pygame.font.Font(None, 72)
     button_font = pygame.font.Font(None, 48)
 
-    # Botón de salir
     exit_surface = button_font.render("Salir del Juego", True, (255, 255, 255))
     exit_rect = exit_surface.get_rect(center=(WIDTH//2, HEIGHT//2 + 50))
 
@@ -23,15 +20,13 @@ def mostrar_ventana_ganaste(screen):
                     pygame.quit()
                     exit()
 
-        # Fondo negro
         screen.fill((0, 0, 0))
 
-        # Mensaje
+
         text_surface = font.render("¡Nivel completado!", True, (255, 255, 0))
         text_rect = text_surface.get_rect(center=(WIDTH//2, HEIGHT//2 - 50))
         screen.blit(text_surface, text_rect)
 
-        # Botón de salir
         screen.blit(exit_surface, exit_rect)
 
         pygame.display.update()
