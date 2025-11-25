@@ -1,9 +1,13 @@
-from game import *
-
 import pygame
+from menu import Menu
+from game import Game
 
-from sys import exit
+pygame.init()
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-game = Game()
+menu = Menu(screen)
+opcion = menu.run()
 
-game.main_void()
+if opcion == "play":
+    game = Game()
+    game.main_void()
