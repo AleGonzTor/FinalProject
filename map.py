@@ -6,7 +6,7 @@ from platform import *
 from soft_platform import * 
 from vertical_obstacle import *
 from horizontal_obstacle import *
-from spikemanager import *
+
 from slime import *
 from spiketramp import *
 from enemy import *
@@ -119,8 +119,10 @@ class Map:
 
                 elif obj_type == "Slime":
                     x, y, s = int(parts[1]), int(parts[2]), int(parts[3])
-                    self.slime.append(Slime(x, y, s, "Fat_bounce"))
-
+                    if int(parts[3]) >= 1:
+                        self.slime.append(Slime(x, y, s, "Fat_bounce"))
+                    else:
+                        self.slime.append(Slime(x, y, s, "Bounce"))
                 elif obj_type == "Spike":
                     x, y = float(parts[1]), float(parts[2])
                     self.spikes_positions.append((x, y))

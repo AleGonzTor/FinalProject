@@ -1,5 +1,5 @@
 import pygame
-from menu import Menu
+from menu import Menu 
 from game import Game
 
 pygame.init()
@@ -9,5 +9,5 @@ menu = Menu(screen)
 opcion = menu.run()
 
 if opcion == "play":
-    game = Game()
+    game = Game("./level1.txt")
     game.main_void()

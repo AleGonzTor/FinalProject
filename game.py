@@ -8,7 +8,7 @@ from sounds import sound_manager
 from game_completed import mostrar_ventana_ganaste
 
 class Game:
-    def __init__(self, maps = None, name = "Puchipu's Adventure"):
+    def __init__(self, maps = "", name = "Puchipu's Adventure"):
         pygame.init()
 
         self.curr_map_index = 0
@@ -27,7 +27,7 @@ class Game:
         if maps:
             self.curr_map_path = maps[self.curr_map_index]
         else:
-            self.curr_map_path = "./levelx.txt"
+            self.curr_map_path = maps
         self.curr_map = Map(self.curr_map_path)
     
         self.characters_list = self.curr_map.get_char()
@@ -186,7 +186,8 @@ class Game:
                     pygame.mixer.music.stop()
                     sound_manager.play("win")
                     mostrar_ventana_ganaste(self.screen)
-                    break
+                    if mostrar_ventana_ganaste == True:
+                        return True
 
             self.camera.centery = self.character.rect.centery - (5 * TILE_SIZE) 
             if self.character.h_speed != 0 and self.character.rect.centerx > self.camera.right - (18 * TILE_SIZE):
