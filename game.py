@@ -8,12 +8,12 @@ from sounds import sound_manager
 from game_completed import mostrar_ventana_ganaste
 
 class Game:
-    def __init__(self, maps = "", name = "Puchipu's Adventure"):
+    def __init__(self, maps = None, name = "Puchipu's Adventure"):
         pygame.init()
 
         self.curr_map_index = 0
 
-        self.TIME_LIMIT = 60000
+        self.TIME_LIMIT = 120000
         self.start_time = pygame.time.get_ticks()
         self.game_over = False
         
@@ -23,14 +23,14 @@ class Game:
 
         pygame.display.set_caption(name)
         self.clock = pygame.time.Clock()
-
+        self.maps = maps
         if maps:
-            self.curr_map_path = maps[self.curr_map_index]
+            self.curr_map_path = self.maps[self.curr_map_index]
         else:
-            self.curr_map_path = maps
+            self.curr_map_path = "./levelx.txt"
         self.curr_map = Map(self.curr_map_path)
     
-        self.characters_list = self.curr_map.get_char()
+        self.characters_list = self.curr_map.get_char() 
         self.character = (self.characters_list)[0]
         self.slimes = self.curr_map.get_slime()
         self.collission = self.curr_map.get_collision_group()
@@ -43,7 +43,8 @@ class Game:
         self.wall = self.curr_map.get_jump_wall()
         self.jetpack = self.curr_map.get_jetpack_group()
         self.flags = self.curr_map.get_flag_group()
-        
+        self.moving_plats = self.curr_map.get_moving_plats()
+
         self.sprites = self.curr_map.get_all()
     
         self.damage_group = self.curr_map.get_damage_group()
@@ -91,7 +92,7 @@ class Game:
         self.flags.empty()
         self.sprites.empty()
         self.damage_group.empty()
-
+        self.moving_plats.empty()
     def charge_map(self):
         self.curr_map = Map(self.curr_map_path)
         self.characters_list = self.curr_map.get_char()
@@ -109,20 +110,24 @@ class Game:
         self.flags = self.curr_map.get_flag_group()
         self.sprites = self.curr_map.get_all()
         self.damage_group = self.curr_map.get_damage_group()
+        self.moving_plats = self.curr_map.get_moving_plats()
+        self.TIME_LIMIT = self.curr_map.get_time()
 
     def main_void(self):
         while True:
+            
             if self.character.status == 0:
                 self.del_map()
                 self.charge_map()
                 self.camera.center = self.character.rect.center
             dt = self.clock.tick(60) / 1000
 
-
+            tt = self.curr_map.get_time()
 
             current_time = pygame.time.get_ticks()
             elapsed = current_time - self.start_time
             remaining = self.TIME_LIMIT - elapsed
+
             if remaining <= 0:
                 self.game_over = True
 
@@ -146,6 +151,9 @@ class Game:
                 jetpack.update(dt)
             for r_spike in self.curr_map.retractable_spikes:
                 r_spike.update(self.collission, self.characters_list, dt)
+            for movingplat in self.moving_plats:
+                movingplat.update()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -154,26 +162,40 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
-                    if event.key == pygame.K_a:
+                    if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                         self.character.set_h_speed(0)
                         self.character.set_movement(0, True)
-                    if event.key == pygame.K_d:
+                    if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                         self.character.set_h_speed(0)
                         self.character.set_movement(1, True)
-                    if event.key == pygame.K_s:
+                    if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.character.set_movement(2, True)
-                    if event.key == pygame.K_w or event.key == pygame.K_SPACE:
+                    if event.key == pygame.K_w or event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                         self.character.jump()
                     if event.key == pygame.K_SPACE:
                         self.character.set_movement(4, True)
+                    if event.key == pygame.K_PLUS:
+                        self.del_map()
+                        self.curr_map_index += 1
+                        self.curr_map_path = self.maps[self.curr_map_index]
+                        self.charge_map()
+                        self.start_time = pygame.time.get_ticks()
+                        continue
+                    if event.key == pygame.K_MINUS:
+                        self.del_map()
+                        self.curr_map_index -= 1
+                        self.curr_map_path = self.maps[self.curr_map_index]
+                        self.charge_map()
+                        self.start_time = pygame.time.get_ticks()
+                        continue
 
                         
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_a:
+                    if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                         self.character.set_movement(0)
-                    if event.key == pygame.K_d:
+                    if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                         self.character.set_movement(1)
-                    if event.key == pygame.K_s:
+                    if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.character.set_movement(2)
                     if event.key == pygame.K_SPACE:
                         self.character.set_movement(4)
@@ -186,8 +208,7 @@ class Game:
                     pygame.mixer.music.stop()
                     sound_manager.play("win")
                     mostrar_ventana_ganaste(self.screen)
-                    if mostrar_ventana_ganaste == True:
-                        return True
+                    break
 
             self.camera.centery = self.character.rect.centery - (5 * TILE_SIZE) 
             if self.character.h_speed != 0 and self.character.rect.centerx > self.camera.right - (18 * TILE_SIZE):

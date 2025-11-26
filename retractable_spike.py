@@ -18,6 +18,7 @@ class RetractableSpike(Object):
         self.lowering = False
 
         self.damage = damage
+        self.tile_image = self.image.copy()
 
 
     def update(self, collision_group, Characters, dt):
@@ -44,10 +45,8 @@ class RetractableSpike(Object):
                 self.rect.y = self.start_y
                 self.lowering = False
 
-        if self.active:
-            for player in Characters:
-                if pygame.sprite.collide_rect(self, player):
-                    player.rect.topleft = player.spawn_point
-                    player.v_speed = 0
-                    player.h_speed = 0
                     
+        if not self.active:
+            self.image = pygame.Surface((TILE_SIZE, TILE_SIZE), pygame.SRCALPHA)
+        else:
+            self.image = self.tile_image.copy()

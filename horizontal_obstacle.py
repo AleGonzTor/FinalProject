@@ -10,4 +10,5 @@ class Obstacle_h(Obstacle):
         if self.rect.right >= WIDTH or self.rect.left<=0:
             self.speed*=-1
             sound_manager.play("hit")
+        self.image = pygame.transform.flip(self.tile_image, self.speed > 0, False)
 

@@ -1,13 +1,15 @@
+from game import *
+from menu import *
+
 import pygame
-from menu import Menu 
-from game import Game
 
 pygame.init()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
+levels = ["./level1.txt", "./level2.txt"]
 menu = Menu(screen)
 opcion = menu.run()
 
 if opcion == "play":
-    game = Game("./level1.txt")
+    game = Game(levels)
     game.main_void()

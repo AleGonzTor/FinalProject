@@ -6,10 +6,8 @@ def mostrar_ventana_ganaste(screen):
     button_font = pygame.font.Font(None, 48)
 
     exit_surface = button_font.render("Salir del Juego", True, (255, 255, 255))
-    continue_surface = button_font.render("Siguiente nivel", True, (255, 255, 255))
-    exit_rect = exit_surface.get_rect(center=(WIDTH//2, HEIGHT//2 + 100))
-    continue_rect = continue_surface.get_rect(center=(WIDTH//2, HEIGHT//2 + 50))
-    
+    exit_rect = exit_surface.get_rect(center=(WIDTH//2, HEIGHT//2 + 50))
+
     ventana_abierta = True
     while ventana_abierta:
         for event in pygame.event.get():
@@ -21,8 +19,6 @@ def mostrar_ventana_ganaste(screen):
                 if exit_rect.collidepoint(mx, my):
                     pygame.quit()
                     exit()
-                elif continue_rect.collidepoint(mx, my):
-                    return True
 
         screen.fill((0, 0, 0))
 

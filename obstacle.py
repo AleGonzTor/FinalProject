@@ -6,7 +6,7 @@ class Obstacle(Object):
         super(). __init__(x,y,pic)
         self.speed=speed
         self.damage=damage
-        
+        self.tile_image = self.image.copy()
 
     def update(self):
         pass

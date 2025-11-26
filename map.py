@@ -6,7 +6,6 @@ from platform import *
 from soft_platform import * 
 from vertical_obstacle import *
 from horizontal_obstacle import *
-
 from slime import *
 from spiketramp import *
 from enemy import *
@@ -14,8 +13,9 @@ from arrowtramp import *
 from wall import *
 from jetpack import *
 from retractable_spike import *
-from flag import*
-
+from flag import *
+from spike import *
+from movingplat import *
 import pygame
 
 class Map:
@@ -33,6 +33,7 @@ class Map:
         self.flags = []
 
         self.spawn_point = (0, 0)
+        self.time = None
 
         self.spikes_positions = []
         self.spikes = []
@@ -40,6 +41,8 @@ class Map:
         self.arrows = []
         self.enemies_info = []
         self.retractable_spikes = []
+        self.staticspikes = []
+        self.moving_plats = []
 
         self.load_map_file(file)
 
@@ -54,19 +57,21 @@ class Map:
         self.floor_group = pygame.sprite.Group(self.floor)
         self.decorations_group = pygame.sprite.Group(self.decorations)
         self.platforms_group = pygame.sprite.Group(self.platforms)
-        self.soft_platforms_group = pygame.sprite.Group(self.soft_platforms)
+        self.soft_platforms_group = pygame.sprite.Group(self.soft_platforms, self.moving_plats)
         self.obst_group = pygame.sprite.Group(self.obst)
         self.collision_group = pygame.sprite.Group(self.platforms, self.floor)
         self.spikes_group = pygame.sprite.Group(self.spikes)
         self.enemies_group = pygame.sprite.Group(self.enemies)  
-        self.arrows_group = pygame.sprite.Group(self.arrows)
-        self.damage_group = pygame.sprite.Group(self.spikes, self.enemies, self.obst, self.arrows)
+        self.arrows_group = pygame.sprite.Group(self.arrows) 
         self.wall_group = pygame.sprite.Group(self.wall)
         self.jetpack_group = pygame.sprite.Group(self.jetpack)
         self.retractable_spikes_group = pygame.sprite.Group(self.retractable_spikes)
         self.flag_group = pygame.sprite.Group(self.flags)
-        
-        self.all_sprites = pygame.sprite.Group(self. decorations, self.retractable_spikes, self.chars, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack, self.flags)
+        self.staticspikes_group = pygame.sprite.Group(self.staticspikes)
+        self.moving_plats_group = pygame.sprite.Group(self.moving_plats)
+
+        self.damage_group = pygame.sprite.Group(self.staticspikes, self.retractable_spikes, self.spikes, self.enemies, self.obst, self.arrows)
+        self.all_sprites = pygame.sprite.Group(self.moving_plats, self.retractable_spikes, self. decorations, self.floor, self.decorations, self.platforms, self.soft_platforms, self.obst, self.slime, self.spikes, self.arrows, self.enemies, self.wall, self.jetpack, self.flags, self.staticspikes, self.chars)
 
     def load_map_file(self, file):
 
@@ -85,6 +90,9 @@ class Map:
 
                 if obj_type == "Spawn":
                     self.spawn_point = (int(parts[1]) * TILE_SIZE, int(parts[2]) * TILE_SIZE)
+
+                elif obj_type == "Time":
+                    self.time = int(parts[1]) * 1000
 
                 elif obj_type == "Character":
                     self.chars.append(Character(self.spawn_point[0], self.spawn_point[1]))
@@ -119,10 +127,11 @@ class Map:
 
                 elif obj_type == "Slime":
                     x, y, s = int(parts[1]), int(parts[2]), int(parts[3])
-                    if int(parts[3]) >= 1:
+                    if s >= 1:
                         self.slime.append(Slime(x, y, s, "Fat_bounce"))
                     else:
                         self.slime.append(Slime(x, y, s, "Bounce"))
+
                 elif obj_type == "Spike":
                     x, y = float(parts[1]), float(parts[2])
                     self.spikes_positions.append((x, y))
@@ -146,20 +155,20 @@ class Map:
                     
                 elif obj_type == "Flag":
                     x, y = int(parts[1]), int(parts[2])
-                    self.flags.append(Flag(x,y, pic = "Flag"))
+                    self.flags.append(Flag(x,y, "Flag"))
                     
+                elif obj_type == "StaticSpike":
+                    x, y, t = int(parts[1]), int(parts[2]), int(parts[3])
+                    self.staticspikes.append(Spike(x, y, t))
+
+                elif obj_type == "MovingPlat":
+                    x, y, w1, w2 = int(parts[1]), int(parts[2]), int(parts[3]), int(parts[4])
+                    self.moving_plats.append(MovingPlatform(x, y, 1.2, "Cloud_single", 1, (w1, w2)))
+
+
         self.arrows = [ArrowTrap(x, y, pic="Platform") for x, y in self.arrows_positions]
         self.spikes = [SpikeTrap(x, y, pic="Platform") for x, y in self.spikes_positions]
         
-    #def _build_groups(self):
-    #    self.slime_group = pygame.sprite.Group(self.slime)
-    #    self.char_group = pygame.sprite.Group(self.chars)
-    #    self.floor_group = pygame.sprite.Group(self.floor)
-    #    self.decorations_group = pygame.sprite.Group(self.decorations)
-    #    self.platforms_group = pygame.sprite.Group(self.platforms)
-    #    self.obst_group = pygame.sprite.Group(self.obst)
-    #    self.collision_group = pygame.sprite.Group(self.platforms, self.floor)
-    #    self.all_sprites = pygame.sprite.Group(self.chars, self.floor, self.decorations, self.platforms, self.obst, self.slime)
     def get_spawn_point(self):
         return self.spawn_point
 
@@ -211,3 +220,9 @@ class Map:
         
     def get_flag_group(self):
         return self.flag_group
+
+    def get_moving_plats(self):
+        return self.moving_plats_group
+
+    def get_time(self):
+        return self.time

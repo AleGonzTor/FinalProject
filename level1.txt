@@ -1,4 +1,5 @@
 "./Sprites/Back.png"
+Time, 120
 Spawn, 0, 54
 Character
 Ground, 0, 55
@@ -64,8 +65,8 @@ Decoration, 20, 50, 7
 Decoration, 40, 50, 7
 Decoration, 60, 50, 7
 Decoration, 80, 50, 7
-Obstacle_v, 98, 10, 20
-Obstacle_v, 104, 40, 20
+Obstacle_v, 97, 10, 20
+Obstacle_v, 103, 40, 20
 Obstacle_h, 100, 51, 20
 Enemy, 54, 54, 0, 106
 Slime, 50, 54, 1
@@ -73,23 +74,86 @@ SoftPlat, 0, 1, 8, 1, 1
 Wall, 0, 2, 2, 15, 2
 Wall, 25, 16, 5, 5, 2
 Wall, 15, 5, 5, 5, 2
-Platform, 60, 20, 5, 5
-Platform, 60, 13, 5, 2
-Platform, 50, 25, 5, 5
-Platform, 50, 18, 5, 2
+Platform, 84, 30, 4, 2
+Platform, 88, 24, 1, 8
+StaticSpike, 84, 25, 2
+StaticSpike, 85, 25, 2
+StaticSpike, 86, 25, 2
+StaticSpike, 87, 26, 3
+StaticSpike, 87, 27, 3
+StaticSpike, 87, 28, 3
+StaticSpike, 87, 29, 3
+Platform, 84, 24, 4, 1
+SoftPlat, 90, 20, 1, 1, 2
+SoftPlat, 100, 20, 1, 1, 2
+SpikeR, 100, 20, 0.3, 1.2
+SoftPlat, 105, 15, 1, 1, 2
+SpikeR, 105, 15, 0.3, 1.2
+SoftPlat, 95, 10, 1, 1, 2
+SpikeR, 95, 10, 0.3, 1.2
+SoftPlat, 85, 10, 1, 1, 2
+SpikeR, 85, 10, 0.3, 1.2
+Obstacle_h, 100, 51, 20
+Platform, 50, 23, 15, 2
+Spike, 50, 17
+Spike, 51, 17
+Spike, 52, 17
+Spike, 53, 17
+Spike, 54, 17
+Spike, 55, 17
+Spike, 56, 17
+Spike, 57, 17
+Spike, 58, 17
+Spike, 59, 17
+Spike, 60, 17
+Spike, 61, 17
+Spike, 62, 17
+Spike, 63, 17
+Spike, 64, 17
+StaticSpike, 50, 15, 0
+StaticSpike, 51, 15, 0
+StaticSpike, 52, 15, 0
+StaticSpike, 53, 15, 0
+StaticSpike, 54, 15, 0
+StaticSpike, 55, 15, 0
+StaticSpike, 56, 15, 0
+StaticSpike, 57, 15, 0
+StaticSpike, 58, 15, 0
+StaticSpike, 59, 15, 0
+StaticSpike, 60, 15, 0
+StaticSpike, 61, 15, 0
+StaticSpike, 62, 15, 0
+StaticSpike, 63, 15, 0
+StaticSpike, 64, 15, 0
+Platform, 50, 16, 20, 1
+Obstacle_h, 100, 13, 20
+Obstacle_h, 0, 9, 20
+StaticSpike, 65, 17, 2
+StaticSpike, 66, 17, 2
+StaticSpike, 67, 17, 2
+StaticSpike, 68, 17, 2
+StaticSpike, 69, 17, 2
 Platform, 40, 30, 5, 15
-#Platform, 40, 23, 5, 2
 Platform, 50, 35, 5, 10
-#Platform, 50, 28, 5, 2
 Platform, 60, 40, 5, 5
-#Platform, 60, 33, 5, 2
 Enemy, 20, 44, 0, 106
-Platform, 2, 30, 38, 1
-SpikeR, 70, 45, 1.2, 1.2
-SpikeR, 71, 45, 1.2, 1.2
-SpikeR, 72, 45, 1.2, 1.2
-SpikeR, 73, 45, 1.2, 1.2
-SpikeR, 74, 45, 1.2, 1.2
-SpikeR, 75, 45, 1.2, 1.2
-SpikeR, 76, 45, 1.2, 1.2
+Platform, 10, 30, 30, 1
+SpikeR, 70, 45, 1, 1
+SpikeR, 71, 45, 1, 1
+SpikeR, 72, 45, 1, 1
+SpikeR, 73, 45, 1, 1
+SpikeR, 74, 45, 1, 1
+SpikeR, 75, 45, 1, 1
+SpikeR, 76, 45, 1, 1
+SpikeR, 77, 45, 1, 1
+SpikeR, 78, 45, 1, 1
+SpikeR, 79, 45, 1, 1
+SpikeR, 80, 45, 1, 1
+SpikeR, 81, 45, 1, 1
+SpikeR, 82, 45, 1, 1
+SpikeR, 83, 45, 1, 1
+SpikeR, 84, 45, 1, 1
+SpikeR, 85, 45, 1, 1
 Flag, 1, 0
+StaticSpike, 10, 54, 0
+MovingPlat, 45, 15, 45, 70

@@ -32,6 +32,10 @@ class Platform(Object):
                 for j in range(1, w_tiles - 1):
                     self.image.blit(self.tile_image, (j * TILE_SIZE, i * TILE_SIZE))
                 self.image.blit(self.image_right, ((w_tiles - 1) * TILE_SIZE, i * TILE_SIZE))
+        
+        elif mode == 2:
+            self.image = pygame.image.load("./Sprites/" + obj_name + "_single.png").convert_alpha()
+        
         else:
             self.image_top_left = pygame.image.load("./Sprites/" + obj_name + "_top_left.png").convert_alpha() 
             self.image_top_right = pygame.image.load("./Sprites/" + obj_name + "_top_right.png").convert_alpha()
