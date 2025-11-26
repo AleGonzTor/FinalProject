@@ -8,7 +8,7 @@ from sounds import sound_manager
 from game_completed import mostrar_ventana_ganaste
 
 class Game:
-    def __init__(self, maps = None, name = "Puchipu's Adventure"):
+    def __init__(self, maps = None, name = "Puchipu's Adventure", icon = "./Sprites/Char.png"):
         pygame.init()
 
         self.curr_map_index = 0
@@ -21,6 +21,8 @@ class Game:
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.camera = pygame.Rect(0, 0, WIDTH // 2, HEIGHT // 2)
 
+        self.icon = pygame.image.load("./Sprites/Char.png")
+        pygame.display.set_icon(self.icon)
         pygame.display.set_caption(name)
         self.clock = pygame.time.Clock()
         self.maps = maps
@@ -237,7 +239,6 @@ class Game:
             self.screen.blit(scaled, (0, 0))
             self.dibujar_timer(remaining)
             pygame.display.update()
-
 
 
 

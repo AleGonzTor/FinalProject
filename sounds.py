@@ -10,7 +10,7 @@ class SoundManager:
          "respawn": pygame.mixer.Sound("./Sounds/lose.wav"),
          "hit": pygame.mixer.Sound("./Sounds/hurt5.wav"),
          "bounce": pygame.mixer.Sound("./Sounds/trampoline.wav"),
-         "hit_slime": pygame.mixer.Sound("./Sounds/hit2.wav")
+         "hit_slime": pygame.mixer.Sound("./Sounds/hit2.wav"),
            }
         pygame.mixer.music.load("./Sounds/music.mp3")
         pygame.mixer.music.play(-1)  
@@ -21,7 +21,5 @@ class SoundManager:
             self.sounds[name].play()
 
 sound_manager = SoundManager()
-
-
 
 

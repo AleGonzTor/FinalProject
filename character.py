@@ -110,7 +110,7 @@ class Character(pygame.sprite.Sprite):
         self.vertical_movement(dt, platforms, soft_platforms, wall)
         self.lateral_movement(dt, platforms)
 
-    def jumpable_walle_collide(self, wall, dt):
+    def jumpable_walle_collide(self, wall):
         hits = pygame.sprite.spritecollide(self, wall, False)
         self.is_on_wall = False
 
@@ -118,14 +118,12 @@ class Character(pygame.sprite.Sprite):
             if self.h_speed > 0:
                 self.rect.right = hit.rect.left 
                 self.h_speed = 0
-                self.wall_side = "right"
                 self.movement[3] = True
                 self.is_on_wall = True
 
             elif self.h_speed < 0:
                 self.rect.left = hit.rect.right
                 self.h_speed = 0
-                self.wall_side = "left"
                 self.movement[3] = True
                 self.is_on_wall = True
                 
@@ -206,7 +204,7 @@ class Character(pygame.sprite.Sprite):
         self.general_movement(platforms, soft_platforms, wall, dt)
         self.general_bounce_colision(slime, dt)
         self.dead_colision(spawn_point, obj_damage)
-        self.jumpable_walle_collide(wall, dt)
+        self.jumpable_walle_collide(wall)
     
     def set_h_speed(self, speed):
         self.h_speed = speed
