@@ -204,7 +204,6 @@ class Game:
                 if self.character.rect.colliderect(flag.rect):
                     self.character.level_complete = True
                     pygame.mixer.music.stop()
-                    sound_manager.play("win")
                     mostrar_ventana_ganaste(self.screen)
                     break
 
@@ -238,6 +237,7 @@ class Game:
             self.screen.blit(scaled, (0, 0))
             self.dibujar_timer(remaining)
             pygame.display.update()
+
 
 
 
