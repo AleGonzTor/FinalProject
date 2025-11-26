@@ -129,29 +129,6 @@ class Character(pygame.sprite.Sprite):
                 
             if self.is_on_wall and self.v_speed > 0:
                 self.v_speed = min(self.v_speed, 4)
-
-    def collision_bounce_vertical (self, object, dt):
-        hits = pygame.sprite.spritecollide(self, object, False)
-
-        for hit in hits:
-            if self.rect.centery < hit.rect.centery:
-                self.rect.bottom = hit.rect.top
-            elif self.rect.centery > hit.rect.centery:
-                self.rect.top = hit.rect.bottom
-            if self.v_speed != 0:
-                self.v_speed = int(self.v_speed * -0.9)
-                sound_manager.play("bounce")
-              
-    def collision_bounce_horizontal (self, object, dt):
-        hits = pygame.sprite.spritecollide(self, object, False)
-
-        for hit in hits:   
-            if self.rect.centerx < hit.rect.centerx:
-                self.rect.right = hit.rect.left
-            else:
-                self.rect.left = hit.rect.right
-            
-            self.h_speed = int(self.h_speed * -0.7)
     
     def general_bounce_colision (self, slime, dt):
         hits = pygame.sprite.spritecollide(self, slime, False)

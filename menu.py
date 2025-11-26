@@ -13,27 +13,30 @@ class Menu:
         self.background = pygame.transform.scale(self.background, (self.size[0], self.size[1]))
 
         self.character = pygame.image.load ("./Sprites/Char.png").convert_alpha()
-        self.character = pygame.transform.scale (self.character, (13*TILE_SIZE, 13*TILE_SIZE))
+        self.character = pygame.transform.scale (self.character, (self.size[1] // 4, self.size[1] // 4))
 
         self.example_image = pygame.image.load("./Sprites/SampleB.png").convert_alpha()
-        self.example_image = pygame.transform.scale_by(self.example_image, 2)
-        self.ex_im_rect = self.example_image.get_rect()
-        
-        self.font = pygame.font.Font("./Sprites/Pixelart.ttf" , 64)
-        self.big_font = pygame.font.Font("./Sprites/Pixelart.ttf" , 128)
+        self.example_rect = self.example_image.get_rect()
+
+        self.example_image = pygame.transform.scale_by(self.example_image, (self.size[1] * 4) / (7 * self.example_rect.height))
+
+        self.example_rect = self.example_image.get_rect()
+
+        self.font = pygame.font.Font("./Sprites/Pixelart.ttf" , self.size[1] // 18)
+        self.big_font = pygame.font.Font("./Sprites/Pixelart.ttf" , self.size[1] // 10)
 
         self.buttons = {
-            "play": pygame.Rect(0, 0, 350, 90),
-            "quit": pygame.Rect(0, 0, 350, 90)
+            "play": pygame.Rect(0, 0, self.size[0] // 8, self.size[1] // 15),
+            "quit": pygame.Rect(0, 0, self.size[0] // 8, self.size[1] // 15)
         }
 
         center_x = self.size[0] // 2
         center_y = self.size[1] // 2
 
-        self.title = pygame.Rect(0, 0, 1400, 180)
-        self.title.center = (center_x, center_y - 28 * TILE_SIZE)
-        self.buttons["play"].center = (center_x - 15 * TILE_SIZE, center_y + 32 * TILE_SIZE)
-        self.buttons["quit"].center = (center_x + 15 * TILE_SIZE, center_y + 32 * TILE_SIZE)
+        self.title = pygame.Rect(0, 0, self.size[0] * (3/5), self.size[1] * (1/7))
+        self.title.center = (center_x, TILE_SIZE + self.title.height // 2)
+        self.buttons["play"].center = (center_x - self.buttons["play"].width // 2 - TILE_SIZE, self.size[1] -  self.buttons["play"].height - TILE_SIZE)
+        self.buttons["quit"].center = (center_x + self.buttons["play"].width // 2 + TILE_SIZE, self.size[1] - self.buttons["play"].height - TILE_SIZE)
         
         
 
@@ -69,7 +72,7 @@ class Menu:
 
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.character, (self.size[0] - (13 * TILE_SIZE), self.size[1] - (15 * TILE_SIZE)))
-            self.screen.blit(self.example_image, (self.size[0] // 2 - self.ex_im_rect.width // 2 , self.size[1]//2 - 20*TILE_SIZE))
+            self.screen.blit(self.example_image, (self.size[0] // 2 - self.example_rect.width // 2 , self.size[1]//2 - self.example_rect.height // 2))
 
             hover_play = self.buttons["play"].collidepoint(mouse)
             hover_quit = self.buttons["quit"].collidepoint(mouse)
@@ -77,13 +80,17 @@ class Menu:
             self.draw_button(self.buttons["play"], "PLAY", hover_play)
             self.draw_button(self.buttons["quit"], "QUIT", hover_quit)
             self.draw_title(self.title, "Puchipu's Adventure")
-            #self.draw_title()
+
             keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_ESCAPE]:
+                pygame.quit()
+                exit()
             
             if click:
                 if hover_play:
                     return "play"
-                if hover_quit or keys[pygame.K_ESCAPE]:
+                if hover_quit:
                     pygame.quit()
                     exit()
 
