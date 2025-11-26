@@ -1,6 +1,7 @@
 "./Sprites/Back.png"
 Time, 120
 Spawn, 0, 54
+#Spawn, 5, 0
 Character
 Ground, 0, 55
 Platform, 0, 45, 20, 5

@@ -1,6 +1,8 @@
 "./Sprites/Back.png"
 Time, 90
 Spawn, 5, 56
+#Spawn, 8, 30
+#Spawn, 56, 20
 Character
 Ground, 0, 57 
 Decoration, 2, 33, 1
