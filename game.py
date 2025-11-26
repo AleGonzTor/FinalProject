@@ -122,8 +122,6 @@ class Game:
                 self.camera.center = self.character.rect.center
             dt = self.clock.tick(60) / 1000
 
-            tt = self.curr_map.get_time()
-
             current_time = pygame.time.get_ticks()
             elapsed = current_time - self.start_time
             remaining = self.TIME_LIMIT - elapsed
@@ -223,7 +221,6 @@ class Game:
                 self.camera.right = WIDTH
 
             if self.camera.top < 0:
-                print(self.camera.top)
                 self.camera.top = 0
 
             elif self.camera.bottom > TILES_Y * 18:
